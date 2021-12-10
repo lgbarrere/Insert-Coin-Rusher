@@ -1,24 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FenteFuel : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
-    [SerializeField] script_pieceFente maPiece;
+    [SerializeField] ArcadeCoinSlot maPiece;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
@@ -30,7 +16,6 @@ public class FenteFuel : MonoBehaviour
         {
             maPiece.apparition();
         }
-
     }
 
     void OnMouseExit()
@@ -39,8 +24,6 @@ public class FenteFuel : MonoBehaviour
         {
             maPiece.disparition();
         }
-        
-
     }
 
     void OnMouseDown()
@@ -48,7 +31,6 @@ public class FenteFuel : MonoBehaviour
         if (gameManager.UseCoin())
         {
             maPiece.animationIsON = true;
-
             gameManager.AddFuel(3);
         }
     }

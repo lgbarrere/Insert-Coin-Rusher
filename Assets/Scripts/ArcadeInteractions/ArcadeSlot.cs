@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class script_fente : MonoBehaviour
+public class ArcadeSlot : MonoBehaviour
 {
     public bool fentePourFuel = true;
         
 
-    public script_pieceFente maPiece;
+    public ArcadeCoinSlot maPiece;
 
     
 

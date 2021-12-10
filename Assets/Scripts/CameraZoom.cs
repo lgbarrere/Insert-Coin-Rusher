@@ -1,14 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class script_zoom : MonoBehaviour
+public class CameraZoom : MonoBehaviour
 {
     //param�trer une touche du clavier
     public KeyCode test;
-
-
-
 
     //Zoom :
     //Initialisation : SphereCollider
@@ -16,8 +11,6 @@ public class script_zoom : MonoBehaviour
     //Initialisation : Position de la cam
     private Transform maposition;
     private Vector3 flag;
-
-
 
     public Transform HitBoxZoom;
     public Transform HitBoxDezoom;
@@ -43,14 +36,11 @@ public class script_zoom : MonoBehaviour
 
 
 
-
     // Start is called before the first frame update
     void Start()
     {
         maposition = this.GetComponent(typeof(Transform)) as Transform;
         maHitBox = gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
-
-
 
         flag = maposition.position;
 
@@ -74,7 +64,6 @@ public class script_zoom : MonoBehaviour
             //maposition.position.z = POSITION_DZ_Z;
 
         }
-        
 
         deltaY = POSITION_ZOOM_Y - POSITION_DZ_Y;
         deltaZ = POSITION_ZOOM_Y - POSITION_DZ_Z;
@@ -102,16 +91,10 @@ public class script_zoom : MonoBehaviour
         if (Input.GetKeyDown(test))
         {
             toggleZoom();
-            
         }
 
-
-
         //Lorsque le zoom est activ�,
-
-
         // Si etat=1  Avancer vers la destination � la vitesse pr�d�finie
-
         // Si etat=3  Reculer vers la position initiale
 
         if (etat == 1)
@@ -123,12 +106,10 @@ public class script_zoom : MonoBehaviour
         {
             flag = maposition.position;
             maposition.position = new Vector3(0, flag.y - vitesse / 35 * (deltaY / (deltaY + deltaZ)) , flag.z - vitesse * (deltaZ / (deltaY + deltaZ)) / 100);
-
         }
-
-
-        
     }
+
+
 
     void OnTriggerEnter(Collider finDeCourses)
     {
@@ -141,21 +122,11 @@ public class script_zoom : MonoBehaviour
             etat = 4;
             maposition.position = new Vector3(flag.x, POSITION_ZOOM_Y, POSITION_ZOOM_Z);
             etat = 2;
-
-
         } else if (etat == 3)
         {
             etat = 4;
             maposition.position = new Vector3(flag.x, POSITION_DZ_Y, POSITION_DZ_Z);
             etat = 0;
-
-
         }
-
-
     }
-
-
-
-
 }

@@ -1,23 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FenteBonus : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
-    [SerializeField] script_pieceFente maPiece;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] ArcadeCoinSlot maPiece;
 
     public void SetGameManager(GameManager gameManager)
     {
@@ -30,7 +16,6 @@ public class FenteBonus : MonoBehaviour
         {
             maPiece.apparition();
         }
-
     }
 
     void OnMouseExit()
@@ -39,8 +24,6 @@ public class FenteBonus : MonoBehaviour
         {
             maPiece.disparition();
         }
-        
-
     }
 
     void OnMouseDown()

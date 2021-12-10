@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class script_pieceFente : MonoBehaviour
+public class ArcadeCoinSlot : MonoBehaviour
 {
 
     private Transform position;
