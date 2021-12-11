@@ -125,7 +125,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9078766772562478676, guid: 5ce5e560e15b6a342b373d4e2d2405c7, type: 3}
       propertyPath: m_Name
-      value: Arcade (6)
+      value: Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 9078766772562478679, guid: 5ce5e560e15b6a342b373d4e2d2405c7, type: 3}
       propertyPath: m_RootOrder

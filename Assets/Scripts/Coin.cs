@@ -11,7 +11,7 @@ public class Coin : MonoBehaviour
     void Start()
     {
         if (animator == null) animator = GetComponent<Animator>();
-        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
 
         NextCoin();
     }

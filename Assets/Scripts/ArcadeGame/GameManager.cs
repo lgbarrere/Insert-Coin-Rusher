@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int fuelMax = 10; //Carburant max
     [SerializeField] int fuelLeft; //Carburant restant
     [SerializeField] int enemyLimit = 10; //Maximum d'ennemis simultanés
-    [SerializeField] public Spaceship spaceship;
+    public Spaceship spaceship;
     [SerializeField] InterfaceController interfaceController;
     [SerializeField] UIController uIController;
     [SerializeField] FenteFuel fenteFuel;
