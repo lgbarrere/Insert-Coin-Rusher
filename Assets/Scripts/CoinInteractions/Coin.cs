@@ -6,7 +6,7 @@ public class Coin : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] AudioSource audioSource;
     [SerializeField] GameManager gameManager;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +17,7 @@ public class Coin : MonoBehaviour
     }
 
     // Update is called once per frame
-    void NextCoin()
+    public void NextCoin()
     {
         int rnd = Random.Range(5, 15);
         StartCoroutine(MakeCoin(rnd));

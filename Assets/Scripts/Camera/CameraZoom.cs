@@ -2,131 +2,72 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    //param�trer une touche du clavier
-    public KeyCode test;
+    enum ZoomState
+    {
+        ZOOMED_OUT,
+        ZOOMED_IN,
+        ZOOMING_IN,
+        ZOOMING_OUT
+    }
 
-    //Zoom :
-    //Initialisation : SphereCollider
-    private SphereCollider maHitBox;
-    //Initialisation : Position de la cam
-    private Transform maposition;
-    private Vector3 flag;
-
-    public Transform HitBoxZoom;
-    public Transform HitBoxDezoom;
-
-    //Variable vitesse (float)
-    public float vitesse = 5;
-
-    //Variable etat : 0 (dezoom), 1(en train de zoomer), 2(zoom�), 3(en train de d�zoomer), 4 (en positionnement final)
-    public int etat = 4;
-
-    //ETAT DEZOOM
-    public const float POSITION_DZ_Y = 8.22F;
-    public const float POSITION_DZ_Z = -10.0F;
-
-    //ETAT ZOOM
-    public const float POSITION_ZOOM_Y = 8.91F;
-    public const float POSITION_ZOOM_Z = -5.0F;
-
-    public bool zoom_initial = false;
-
-    private float deltaY = 0;
-    private float deltaZ = 0;
-
-
+    public float moveSpeed = 0.5f;
+    private Vector3 zoomOutPosition;
+    private Vector3 zoomInPosition;
+    private ZoomState zoomState;
+    private Vector3 targetPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        maposition = this.GetComponent(typeof(Transform)) as Transform;
-        maHitBox = gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
-
-        flag = maposition.position;
-
-        HitBoxZoom.position = new Vector3(flag.x, POSITION_ZOOM_Y, POSITION_ZOOM_Z);
-        HitBoxDezoom.position = new Vector3(flag.x, POSITION_DZ_Y, POSITION_DZ_Z);
-
-        if (zoom_initial)
-        {
-            //position zoom
-            maposition.position = new Vector3(flag.x, POSITION_ZOOM_Y, POSITION_ZOOM_Z);
-            etat = 2;
-            //maposition.position.z = POSITION_Z_Z;
-        }
-        else
-        {
-            //position dezoom
-            
-            maposition.position = new Vector3(flag.x, POSITION_DZ_Y, POSITION_DZ_Z);
-            etat = 0;
-            //maposition.position.y = POSITION_DZ_Y;
-            //maposition.position.z = POSITION_DZ_Z;
-
-        }
-
-        deltaY = POSITION_ZOOM_Y - POSITION_DZ_Y;
-        deltaZ = POSITION_ZOOM_Y - POSITION_DZ_Z;
+        zoomOutPosition = transform.position;
+        zoomInPosition = new(transform.position.x, transform.position.y, transform.position.z + 5);
+        zoomState = ZoomState.ZOOMED_OUT;
     }
-
-
-    private void toggleZoom()
-    {
-        Debug.Log("toggle le zoom");
-        
-        if(etat%2 == 0)
-        {
-            etat++;
-            Debug.Log("Etat = " + etat);
-        }
-    }
-
-
 
     // Update is called once per frame
     void Update()
     {
+        float step = moveSpeed * Time.deltaTime;
 
-        //lorsque cette touche est appuy�e, si la cam n'est pas en mouvement : toggle le zoom
-        if (Input.GetKeyDown(test))
+        switch (zoomState)
         {
-            toggleZoom();
+            // Try to zoom in
+            case ZoomState.ZOOMED_OUT:
+            case ZoomState.ZOOMING_OUT:
+                if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+                {
+                    targetPosition = zoomInPosition;
+                    zoomState = ZoomState.ZOOMING_IN;
+                }
+                break;
+            // Try to zoom out
+            case ZoomState.ZOOMED_IN:
+            case ZoomState.ZOOMING_IN:
+                if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+                {
+                    targetPosition = zoomOutPosition;
+                    zoomState = ZoomState.ZOOMING_OUT;
+                }
+                break;
         }
-
-        //Lorsque le zoom est activ�,
-        // Si etat=1  Avancer vers la destination � la vitesse pr�d�finie
-        // Si etat=3  Reculer vers la position initiale
-
-        if (etat == 1)
+        // If zooming in or out, update camera's position
+        if(zoomState == ZoomState.ZOOMING_IN || zoomState == ZoomState.ZOOMING_OUT)
         {
-            flag = maposition.position;
-            maposition.position = new Vector3(0, flag.y + vitesse / 35 * (deltaY / (deltaY + deltaZ)) , flag.z + vitesse * (deltaZ / (deltaY + deltaZ)) / 100);
-        }
-        else if (etat == 3)
-        {
-            flag = maposition.position;
-            maposition.position = new Vector3(0, flag.y - vitesse / 35 * (deltaY / (deltaY + deltaZ)) , flag.z - vitesse * (deltaZ / (deltaY + deltaZ)) / 100);
-        }
-    }
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
 
-
-
-    void OnTriggerEnter(Collider finDeCourses)
-    {
-        //Lorsque la cam rencontre un obstacle :
-        // Si �tat = 1 : etat=4 -> position = position destination -> etat = 2
-        // Si �tat = 3 : etat=4 -> position = position arriv� -> etat = 0
-        //Debug.Log("collision detect�e");
-        if(etat == 1)
-        {
-            etat = 4;
-            maposition.position = new Vector3(flag.x, POSITION_ZOOM_Y, POSITION_ZOOM_Z);
-            etat = 2;
-        } else if (etat == 3)
-        {
-            etat = 4;
-            maposition.position = new Vector3(flag.x, POSITION_DZ_Y, POSITION_DZ_Z);
-            etat = 0;
+            // If the camera is close enough to the target, consider the target is reached
+            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+            {
+                transform.position = targetPosition;
+                if(zoomState == ZoomState.ZOOMING_IN)
+                {
+                    zoomState = ZoomState.ZOOMED_IN;
+                }
+                else
+                {
+                    zoomState = ZoomState.ZOOMED_OUT;
+                }
+            }
         }
     }
 }
