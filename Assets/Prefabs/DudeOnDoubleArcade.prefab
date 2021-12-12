@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5349752916780498588}
   - component: {fileID: 1863210891726977451}
-  - component: {fileID: 624455054322604154}
   m_Layer: 0
   m_Name: CoinIdle
   m_TagString: Untagged
@@ -85,19 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!135 &624455054322604154
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5664721214881155131}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6565326691346205774
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +367,6 @@ MonoBehaviour:
   animator: {fileID: 6565326691602368731}
   audioSource: {fileID: 0}
   gameManager: {fileID: 0}
-  CoinCollider: {fileID: 8363613824329285298}
 --- !u!212 &6663747903990081096
 SpriteRenderer:
   m_ObjectHideFlags: 0

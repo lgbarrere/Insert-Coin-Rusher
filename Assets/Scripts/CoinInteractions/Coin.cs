@@ -34,7 +34,7 @@ public class Coin : MonoBehaviour
     {
         audioSource.Play();
     }
-
+    
     void OnMouseDown()
     {
         gameManager.AddCoin();
