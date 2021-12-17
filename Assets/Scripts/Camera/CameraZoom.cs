@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    enum ZoomState
+    public enum ZoomState
     {
         ZOOMED_OUT,
         ZOOMED_IN,
@@ -13,7 +13,7 @@ public class CameraZoom : MonoBehaviour
     public float moveSpeed = 0.5f;
     private Vector3 zoomOutPosition;
     private Vector3 zoomInPosition;
-    private ZoomState zoomState;
+    public ZoomState zoomState;
     private Vector3 targetPosition;
 
     // Start is called before the first frame update

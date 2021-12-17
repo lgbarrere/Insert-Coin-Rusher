@@ -12,9 +12,9 @@ public class FenteFuel : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (gameManager.coins > 0)
+        if (gameManager.nbCoins > 0)
         {
-            maPiece.apparition();
+            maPiece.Apparition();
         }
     }
 
@@ -22,7 +22,7 @@ public class FenteFuel : MonoBehaviour
     {
         if (!maPiece.animationIsON)
         {
-            maPiece.disparition();
+            maPiece.Disparition();
         }
     }
 

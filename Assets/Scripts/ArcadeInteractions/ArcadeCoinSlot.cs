@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ArcadeCoinSlot : MonoBehaviour
@@ -42,19 +40,17 @@ public class ArcadeCoinSlot : MonoBehaviour
         position = this.GetComponent(typeof(Transform)) as Transform;
         positionDeDepart = position.position;
 
-        disparition();
+        Disparition();
     }
 
-    public void apparition()
+    public void Apparition()
     {
         monSprite.enabled = true;
-
     }
 
-    public void disparition()
+    public void Disparition()
     {
         monSprite.enabled = false;
-
     }
 
 
@@ -70,12 +66,8 @@ public class ArcadeCoinSlot : MonoBehaviour
 
     void OnTriggerEnter(Collider finDeCourses)
     {
-
         position.position = positionDeDepart;
         animationIsON = false;
-        disparition();
-
+        Disparition();
     }
-
-
 }

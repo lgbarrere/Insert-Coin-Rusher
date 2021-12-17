@@ -37,9 +37,12 @@ public class Coin : MonoBehaviour
     
     void OnMouseDown()
     {
-        gameManager.AddCoin();
-        animator.SetTrigger("takeCoin");
+        if (!gameManager.MaxCoinReached())
+        {
+            gameManager.AddCoin();
+            animator.SetTrigger("takeCoin");
 
-        NextCoin();
+            NextCoin();
+        }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum Bonus
@@ -31,7 +30,8 @@ public class GameManager : MonoBehaviour
 
     int enemyCount; //Compteur d'ennemis
     float timeCounter; //Compteur de temps
-    public int coins;
+    public const int maxCoins = 3;
+    public int nbCoins = maxCoins;
     bool canControl = false;
     public bool isPlaying = false;
     bool timerActive = false;
@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
         interfaceController.SetGameManager(this);
         fenteFuel.SetGameManager(this);
         fenteBonus.SetGameManager(this);
+        nbCoins = maxCoins;
+        uIController.SetCoinText(nbCoins);
         EndGame();
     }
 
@@ -65,7 +67,7 @@ public class GameManager : MonoBehaviour
 
         //Mise à jour du timer
         timeCounter += Time.deltaTime;
-        if (timeCounter >= 2 && timerActive)
+        if (timerActive && timeCounter >= 2)
         {
             UpdateFuel();
         }
@@ -83,17 +85,29 @@ public class GameManager : MonoBehaviour
         canControl = false;
     }
 
+    public bool MaxCoinReached()
+    {
+        if (nbCoins < maxCoins)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public void AddCoin()
     {
-        coins++;
-        uIController.SetCoinText(coins);
+        if(!MaxCoinReached())
+        {
+            nbCoins++;
+            uIController.SetCoinText(nbCoins);
+        }
     }
 
     public bool UseCoin()
     {
-        if (coins > 0) {
-            coins--;
-            uIController.SetCoinText(coins);
+        if (nbCoins > 0) {
+            nbCoins--;
+            uIController.SetCoinText(nbCoins);
             return true;
         } else {
             return false;

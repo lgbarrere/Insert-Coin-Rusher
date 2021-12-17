@@ -31,7 +31,7 @@ public class ArcadeSlot : MonoBehaviour
     
     void OnMouseEnter()
     {
-        maPiece.apparition();
+        maPiece.Apparition();
 
     }
 
@@ -39,7 +39,7 @@ public class ArcadeSlot : MonoBehaviour
     {
         if (!maPiece.animationIsON)
         {
-            maPiece.disparition();
+            maPiece.Disparition();
         }
         
 

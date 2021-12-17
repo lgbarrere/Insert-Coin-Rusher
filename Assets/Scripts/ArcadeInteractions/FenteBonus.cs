@@ -12,9 +12,9 @@ public class FenteBonus : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (gameManager.coins > 0 && gameManager.isPlaying)
+        if (gameManager.nbCoins > 0 && gameManager.isPlaying)
         {
-            maPiece.apparition();
+            maPiece.Apparition();
         }
     }
 
@@ -22,7 +22,7 @@ public class FenteBonus : MonoBehaviour
     {
         if (!maPiece.animationIsON)
         {
-            maPiece.disparition();
+            maPiece.Disparition();
         }
     }
 
