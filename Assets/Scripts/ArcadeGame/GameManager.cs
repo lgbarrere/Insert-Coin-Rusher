@@ -4,10 +4,11 @@ using UnityEngine;
 public enum Bonus
 {
     SHIELD = 0, // Avoid one dammage
-    RELOAD = 1, // Reload some fuel
+    FUEL = 1, // Reload some fuel
     POWER = 2, // Power in lasers increased
     CLEAR = 3, // Kill all ennemies
-    MALUS = 4 // Decrease power or number of lasers
+    DRONE = 4, // Call a drone
+    MALUS = 5 // Remove an existing bonus
 }
 
 public class GameManager : MonoBehaviour
@@ -53,12 +54,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Quand la partie est terminée, appuyer sur espace relance le jeu
-        /*if (Input.GetKeyDown(KeyCode.Space) && canControl && !isPlaying)
-        {
-            StartGame();
-        }*/
-        
         //Si le timer atteint 0 ou le joueur se fait toucher, la partie se termine
         if ((fuelLeft == 0 || spaceship == null) && canControl && isPlaying)
         {
@@ -226,7 +221,7 @@ public class GameManager : MonoBehaviour
 
     public void RandomBonus()
     {
-        Bonus bonus = (Bonus)Random.Range(0, 5);
+        Bonus bonus = (Bonus)Random.Range(0, 6);
 
         roulette.SetInteger("Bonus", (int)bonus);
 
@@ -236,7 +231,7 @@ public class GameManager : MonoBehaviour
             case Bonus.SHIELD:
                 spaceship.Shield();
                 break;
-            case Bonus.RELOAD:
+            case Bonus.FUEL:
                 AddFuel(fuelMax);
                 break;
             case Bonus.POWER:
@@ -248,6 +243,9 @@ public class GameManager : MonoBehaviour
             case Bonus.CLEAR:
                 CleanEnnemies();
                 AddFuel(fuelMax);
+                break;
+            case Bonus.DRONE:
+                // TO DO
                 break;
             case Bonus.MALUS:
                 if (spaceship.powerShoot > 1)
