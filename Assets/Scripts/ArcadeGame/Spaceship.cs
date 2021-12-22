@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spaceship : MonoBehaviour
 {
-    
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource audioSource;

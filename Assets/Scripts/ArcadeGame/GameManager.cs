@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] int fuelMax = 10; //Carburant max
     [SerializeField] int fuelLeft; //Carburant restant
     [SerializeField] int enemyLimit = 10; //Maximum d'ennemis simultanés
-    public Spaceship spaceship;
     [SerializeField] InterfaceController interfaceController;
     [SerializeField] UIController uIController;
     [SerializeField] FenteFuel fenteFuel;
@@ -27,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject goSpaceship;
     [SerializeField] GameObject goEnemy;
 
+    public Spaceship spaceship;
     public Animator roulette;
 
     int enemyCount; //Compteur d'ennemis
@@ -36,7 +36,10 @@ public class GameManager : MonoBehaviour
     bool canControl = false;
     public bool isPlaying = false;
     bool timerActive = false;
-    
+    public GameObject goDrone;
+    private DroneManager drone;
+    private bool droneActive = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -221,10 +224,10 @@ public class GameManager : MonoBehaviour
 
     public void RandomBonus()
     {
-        Bonus bonus = (Bonus)Random.Range(0, 6);
+        int randomInt = Random.Range(0, 6);
+        Bonus bonus = (Bonus)randomInt;
 
-        roulette.SetInteger("Bonus", (int)bonus);
-
+        roulette.SetInteger("Bonus", randomInt);
 
         switch (bonus)
         {
@@ -245,12 +248,23 @@ public class GameManager : MonoBehaviour
                 AddFuel(fuelMax);
                 break;
             case Bonus.DRONE:
-                // TO DO
+                if(!droneActive)
+                {
+                    droneActive = true;
+                    Vector3 startPos = spaceship.transform.position;
+                    startPos.y += 0.2f;
+                    drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
+                }
                 break;
             case Bonus.MALUS:
                 if (spaceship.powerShoot > 1)
                 {
                     spaceship.powerShoot--;
+                }
+                else if(droneActive)
+                {
+                    Destroy(drone.gameObject);
+                    droneActive = false;
                 }
                 break;
             default:
@@ -276,6 +290,9 @@ public class GameManager : MonoBehaviour
 
         //Destruction du vaisseau
         if (spaceship != null) DestroyImmediate(spaceship.gameObject, true);
+
+        // Drone destruction if active
+        if (droneActive) DestroyImmediate(drone.gameObject, true);
 
         //Mise à jour de l'interface
         interfaceController.ShowGameOver();

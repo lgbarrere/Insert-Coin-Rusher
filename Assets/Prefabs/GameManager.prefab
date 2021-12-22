@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1032222578}
   m_RootOrder: 0
@@ -164,6 +165,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 867639187}
   - {fileID: 1974243381}
@@ -281,6 +283,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3786376908458349949}
   m_RootOrder: 1
@@ -347,6 +350,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1032222578}
   m_RootOrder: 1
@@ -483,6 +487,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1032222578}
   - {fileID: 1907958297}
@@ -601,8 +606,15 @@ MonoBehaviour:
   fuelMax: 10
   fuelLeft: 0
   enemyLimit: 10
-  spaceship: {fileID: 0}
   interfaceController: {fileID: 1032222574}
+  uIController: {fileID: 0}
+  fenteFuel: {fileID: 0}
+  fenteBonus: {fileID: 0}
   audioSource: {fileID: 0}
   goSpaceship: {fileID: 7467910151494529966, guid: 068441f626a37384b84b0668e93714b3, type: 3}
   goEnemy: {fileID: 4566478308448307878, guid: 4aad2b9ef7f7c964e84e5a9cdd5615a7, type: 3}
+  spaceship: {fileID: 0}
+  roulette: {fileID: 0}
+  nbCoins: 3
+  isPlaying: 0
+  goDrone: {fileID: 7399948868331734165, guid: d56635a754469514c8c5754bffde1263, type: 3}
