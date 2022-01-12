@@ -69,6 +69,12 @@ public class GameManager : MonoBehaviour
         {
             UpdateFuel();
         }
+
+        // Move the drone if active
+        if(droneActive)
+        {
+            drone.Move(spaceship.transform.position);
+        }
     }
 
     //Active les contrôles
@@ -292,7 +298,11 @@ public class GameManager : MonoBehaviour
         if (spaceship != null) DestroyImmediate(spaceship.gameObject, true);
 
         // Drone destruction if active
-        if (droneActive) DestroyImmediate(drone.gameObject, true);
+        if (droneActive)
+        {
+            DestroyImmediate(drone.gameObject, true);
+            droneActive = false;
+        }
 
         //Mise à jour de l'interface
         interfaceController.ShowGameOver();
