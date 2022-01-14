@@ -33,8 +33,7 @@ public class FenteBonus : MonoBehaviour
         if (gameManager.UseCoin())
         {
             maPiece.animationIsON = true;
-
-            gameManager.RandomBonus();
+            gameManager.LaunchRoulette();
         }
     }
 }

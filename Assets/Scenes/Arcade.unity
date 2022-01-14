@@ -1262,7 +1262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9078766772562478679, guid: 5ce5e560e15b6a342b373d4e2d2405c7, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9078766772562478679, guid: 5ce5e560e15b6a342b373d4e2d2405c7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2631,7 +2631,7 @@ Animator:
   m_GameObject: {fileID: 2028331536}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1fff88c17ba22704abe2c0c3c3ce4a70, type: 2}
+  m_Controller: {fileID: 9100000, guid: a134a62a483cfb04fbe21cd2dd218cf4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2701,7 +2701,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028331536}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.73800004, y: 7.054, z: -0.0049999356}
+  m_LocalPosition: {x: -0.751, y: 7.055, z: 0}
   m_LocalScale: {x: 0.44999987, y: 0.45, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2921,6 +2921,10 @@ PrefabInstance:
       propertyPath: fenteBonus
       value: 
       objectReference: {fileID: 4869429}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: newRoulette
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: uIController
       value: 

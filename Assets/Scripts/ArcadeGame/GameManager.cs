@@ -40,6 +40,14 @@ public class GameManager : MonoBehaviour
     private DroneManager drone;
     private bool droneActive = false;
 
+    private const float rouletteTimer = 2f;
+    private const float rouletteIconTimer = 0.2f;
+    
+    private float rouletteCurrentTime = 0f;
+    private float rouletteIconCurrentTime = 0f;
+    private int iconID = 0;
+    private bool activeRoulette = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,10 +79,13 @@ public class GameManager : MonoBehaviour
         }
 
         // Move the drone if active
-        if(droneActive)
+        if (droneActive)
         {
             drone.Move(spaceship.transform.position);
         }
+
+        // Choose a bonus if the roulette is active
+        RandomBonus();
     }
 
     //Active les contrôles
@@ -228,53 +239,94 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LaunchRoulette()
+    {
+        roulette.SetBool("Launch", true);
+        roulette.SetBool("Choosing", true);
+        activeRoulette = true;
+        iconID = Random.Range(0, 6);
+        roulette.SetInteger("BonusID", iconID);
+    }
+
+    public void ResetRoulette()
+    {
+        if (activeRoulette)
+        {
+            activeRoulette = false;
+            rouletteCurrentTime = 0f;
+            rouletteIconCurrentTime = 0f;
+            roulette.SetBool("Choosing", false);
+        }
+        roulette.SetBool("Launch", false);
+    }
+
     public void RandomBonus()
     {
-        int randomInt = Random.Range(0, 6);
-        Bonus bonus = (Bonus)randomInt;
-
-        roulette.SetInteger("Bonus", randomInt);
-
-        switch (bonus)
+        if (activeRoulette)
         {
-            case Bonus.SHIELD:
-                spaceship.Shield();
-                break;
-            case Bonus.FUEL:
-                AddFuel(fuelMax);
-                break;
-            case Bonus.POWER:
-                if(spaceship.powerShoot < spaceship.maxPowerShoot)
+            rouletteCurrentTime += Time.deltaTime;
+            rouletteIconCurrentTime += Time.deltaTime;
+
+            if (rouletteIconCurrentTime >= rouletteIconTimer)
+            {
+                rouletteIconCurrentTime -= rouletteIconTimer;
+                // ChangeIcon
+                iconID = (iconID + Random.Range(0, 5) + 1) % 6;
+                roulette.SetInteger("BonusID", iconID);
+
+                // Reset roulette
+                if (rouletteCurrentTime >= rouletteTimer)
                 {
-                    spaceship.powerShoot++;
+                    rouletteCurrentTime = 0;
+                    rouletteIconCurrentTime = 0;
+                    activeRoulette = false;
+                    roulette.SetBool("Choosing", false);
+
+                    //Bonus
+                    Bonus bonus = (Bonus)iconID;
+                    switch (bonus)
+                    {
+                        case Bonus.SHIELD:
+                            spaceship.Shield();
+                            break;
+                        case Bonus.FUEL:
+                            AddFuel(fuelMax);
+                            break;
+                        case Bonus.POWER:
+                            if (spaceship.powerShoot < spaceship.maxPowerShoot)
+                            {
+                                spaceship.powerShoot++;
+                            }
+                            break;
+                        case Bonus.CLEAR:
+                            CleanEnnemies();
+                            AddFuel(fuelMax);
+                            break;
+                        case Bonus.DRONE:
+                            if (!droneActive)
+                            {
+                                droneActive = true;
+                                Vector3 startPos = spaceship.transform.position;
+                                startPos.y += 0.2f;
+                                drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
+                            }
+                            break;
+                        case Bonus.MALUS:
+                            if (spaceship.powerShoot > 1)
+                            {
+                                spaceship.powerShoot--;
+                            }
+                            else if (droneActive)
+                            {
+                                Destroy(drone.gameObject);
+                                droneActive = false;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                break;
-            case Bonus.CLEAR:
-                CleanEnnemies();
-                AddFuel(fuelMax);
-                break;
-            case Bonus.DRONE:
-                if(!droneActive)
-                {
-                    droneActive = true;
-                    Vector3 startPos = spaceship.transform.position;
-                    startPos.y += 0.2f;
-                    drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
-                }
-                break;
-            case Bonus.MALUS:
-                if (spaceship.powerShoot > 1)
-                {
-                    spaceship.powerShoot--;
-                }
-                else if(droneActive)
-                {
-                    Destroy(drone.gameObject);
-                    droneActive = false;
-                }
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -303,6 +355,8 @@ public class GameManager : MonoBehaviour
             DestroyImmediate(drone.gameObject, true);
             droneActive = false;
         }
+
+        ResetRoulette();
 
         //Mise à jour de l'interface
         interfaceController.ShowGameOver();

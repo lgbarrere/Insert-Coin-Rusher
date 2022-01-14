@@ -6,7 +6,7 @@ public class DroneManager : MonoBehaviour
     public float shootTimer = 2f;
     private float shootCurrentTime = 0f;
     public GameObject projectile;
-    private const float maxDroneOffset = 0.2f;
+    private const float maxDroneOffset = 0.1f;
     private float droneOffset = 0f;
     private const float moveSpeed = 0.5f;
     bool moveLeft = true;
@@ -34,8 +34,6 @@ public class DroneManager : MonoBehaviour
 
     public void Move(Vector3 spaceshipPos)
     {
-        Vector3 dronePos = spaceshipPos;
-
         // Determine if the drone must move left or right
         if(Mathf.Abs(droneOffset) >= maxDroneOffset)
         {
@@ -52,7 +50,9 @@ public class DroneManager : MonoBehaviour
         {
             droneOffset += step;
         }
+        droneOffset = Mathf.Clamp(droneOffset, -maxDroneOffset, maxDroneOffset);
 
+        Vector3 dronePos = spaceshipPos;
         dronePos.x += droneOffset;
         dronePos.y += 0.1f;
         transform.position = dronePos;
