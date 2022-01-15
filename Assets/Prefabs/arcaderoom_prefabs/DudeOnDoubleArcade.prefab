@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 6663747903990081096}
   - component: {fileID: 8363613824329285298}
   m_Layer: 0
-  m_Name: CoinFallAnimation
+  m_Name: FallingCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -427,7 +427,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6565326691602368735}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 2
