@@ -13,6 +13,7 @@ public class EnemyEye : MonoBehaviour
 
     Vector2 moveVector;
     GameManager gameManager;
+    private bool alive = true;
     
     void Awake()
     {
@@ -52,8 +53,9 @@ public class EnemyEye : MonoBehaviour
     {
         health -= gameManager.spaceship.powerShoot;
 
-        if (health <= 0)
+        if (health <= 0 && alive)
         {
+            alive = false;
             StartCoroutine(Kill());
         }
     }
