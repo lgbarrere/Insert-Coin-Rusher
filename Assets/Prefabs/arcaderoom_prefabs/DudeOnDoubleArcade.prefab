@@ -367,6 +367,11 @@ MonoBehaviour:
   animator: {fileID: 6565326691602368731}
   audioSource: {fileID: 0}
   gameManager: {fileID: 0}
+  coinFeedback: {fileID: 0}
+  coinMovingStartPos: {fileID: 5349752916780498588}
+  inventoryTransform: {fileID: 0}
+  CanvasRect: {fileID: 0}
+  coinMovingSpeed: 50
 --- !u!212 &6663747903990081096
 SpriteRenderer:
   m_ObjectHideFlags: 0
