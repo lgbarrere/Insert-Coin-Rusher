@@ -62,6 +62,7 @@ public class EnemyEye : MonoBehaviour
     {
         gameManager.AddFuel(2);
         gameManager.ReduceEnemyCount();
+        gameManager.AddScore(1);
 
         Component[] projectiles = GetComponentsInChildren<EyeProjectile>();
         foreach(EyeProjectile ep in projectiles)

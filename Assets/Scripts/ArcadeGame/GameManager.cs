@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public enum Bonus
 {
@@ -13,8 +14,6 @@ public enum Bonus
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] int startFuel = 10; //Carburant en début de partie
-    [SerializeField] int fuelMax = 10; //Carburant max
     [SerializeField] int fuelLeft; //Carburant restant
     [SerializeField] int enemyLimit = 10; //Maximum d'ennemis simultanés
     [SerializeField] InterfaceController interfaceController;
@@ -22,13 +21,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] FenteFuel fenteFuel;
     [SerializeField] FenteBonus fenteBonus;
     [SerializeField] AudioSource audioSource;
-
     [SerializeField] GameObject goSpaceship;
     [SerializeField] GameObject goEnemy;
-
     public Spaceship spaceship;
     public Animator roulette;
+    public TextMeshProUGUI scoreText;
 
+    // The elements in game
+    public const int fuelMax = 10; //Carburant max
+    [SerializeField] int startFuel = fuelMax; //Carburant en début de partie
     int enemyCount; //Compteur d'ennemis
     float timeCounter; //Compteur de temps
     public const int maxCoins = 3;
@@ -39,10 +40,12 @@ public class GameManager : MonoBehaviour
     public GameObject goDrone;
     private DroneManager drone;
     private bool droneActive = false;
+    private readonly int maxScore = 10000000;
+    private int score = 0;
 
+    // The elements of the roulette
     private const float rouletteTimer = 2f;
     private const float rouletteIconTimer = 0.2f;
-    
     private float rouletteCurrentTime = 0f;
     private float rouletteIconCurrentTime = 0f;
     private int iconID = 0;
@@ -66,7 +69,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Si le timer atteint 0 ou le joueur se fait toucher, la partie se termine
-        if ((fuelLeft == 0 || spaceship == null) && canControl && isPlaying)
+        if ((fuelLeft <= 0 || spaceship == null) && canControl && isPlaying)
         {
             EndGame();
         }
@@ -85,7 +88,10 @@ public class GameManager : MonoBehaviour
         }
 
         // Choose a bonus if the roulette is active
-        RandomBonus();
+        if (activeRoulette)
+        {
+            RandomBonus();
+        }
     }
 
     //Active les contrôles
@@ -146,12 +152,11 @@ public class GameManager : MonoBehaviour
         timeCounter = 0;
         timerActive = true;
 
+        // Reset score
+        ResetScore();
+
         //Destruction des ennemis restants
-        Component[] enemies = GetComponentsInChildren<EnemyEye>();
-        foreach (EnemyEye enemy in enemies)
-        {
-            Destroy(enemy.gameObject);
-        }
+        CleanEnnemies();
 
         //Apparition du vaisseau
         Vector3 startPos = transform.position;
@@ -219,7 +224,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddFuel(int amount)
+    public void AddFuel(int amount = fuelMax)
     {
         if (isPlaying) {
             fuelLeft = Mathf.Min(fuelLeft + amount, fuelMax);
@@ -237,6 +242,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(enemy.gameObject);
         }
+        enemyCount = 0;
     }
 
     public void LaunchRoulette()
@@ -262,69 +268,68 @@ public class GameManager : MonoBehaviour
 
     public void RandomBonus()
     {
-        if (activeRoulette)
+        rouletteCurrentTime += Time.deltaTime;
+        rouletteIconCurrentTime += Time.deltaTime;
+
+        if (rouletteIconCurrentTime >= rouletteIconTimer)
         {
-            rouletteCurrentTime += Time.deltaTime;
-            rouletteIconCurrentTime += Time.deltaTime;
+            rouletteIconCurrentTime -= rouletteIconTimer;
+            // ChangeIcon
+            iconID = (iconID + Random.Range(0, 5) + 1) % 6;
+            roulette.SetInteger("BonusID", iconID);
 
-            if (rouletteIconCurrentTime >= rouletteIconTimer)
+            // Reset roulette
+            if (rouletteCurrentTime >= rouletteTimer)
             {
-                rouletteIconCurrentTime -= rouletteIconTimer;
-                // ChangeIcon
-                iconID = (iconID + Random.Range(0, 5) + 1) % 6;
-                roulette.SetInteger("BonusID", iconID);
+                rouletteCurrentTime = 0;
+                rouletteIconCurrentTime = 0;
+                activeRoulette = false;
+                roulette.SetBool("Choosing", false);
 
-                // Reset roulette
-                if (rouletteCurrentTime >= rouletteTimer)
+                //Bonus
+                Bonus bonus = (Bonus)iconID;
+                switch (bonus)
                 {
-                    rouletteCurrentTime = 0;
-                    rouletteIconCurrentTime = 0;
-                    activeRoulette = false;
-                    roulette.SetBool("Choosing", false);
-
-                    //Bonus
-                    Bonus bonus = (Bonus)iconID;
-                    switch (bonus)
-                    {
-                        case Bonus.SHIELD:
-                            spaceship.Shield();
-                            break;
-                        case Bonus.FUEL:
-                            AddFuel(fuelMax);
-                            break;
-                        case Bonus.POWER:
-                            if (spaceship.powerShoot < spaceship.maxPowerShoot)
-                            {
-                                spaceship.powerShoot++;
-                            }
-                            break;
-                        case Bonus.CLEAR:
-                            CleanEnnemies();
-                            AddFuel(fuelMax);
-                            break;
-                        case Bonus.DRONE:
-                            if (!droneActive)
-                            {
-                                droneActive = true;
-                                Vector3 startPos = spaceship.transform.position;
-                                startPos.y += 0.2f;
-                                drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
-                            }
-                            break;
-                        case Bonus.MALUS:
-                            if (spaceship.powerShoot > 1)
-                            {
-                                spaceship.powerShoot--;
-                            }
-                            else if (droneActive)
-                            {
-                                Destroy(drone.gameObject);
-                                droneActive = false;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                    case Bonus.SHIELD:
+                        spaceship.Shield();
+                        break;
+                    case Bonus.FUEL:
+                        AddFuel(fuelMax / 3);
+                        break;
+                    case Bonus.POWER:
+                        if (spaceship.powerShoot < spaceship.maxPowerShoot)
+                        {
+                            spaceship.powerShoot++;
+                        }
+                        break;
+                    case Bonus.CLEAR:
+                        AddScore(enemyCount);
+                        AddFuel(2 * enemyCount);
+                        CleanEnnemies();
+                        break;
+                    case Bonus.DRONE:
+                        if (!droneActive)
+                        {
+                            droneActive = true;
+                            Vector3 startPos = spaceship.transform.position;
+                            startPos.y += 0.2f;
+                            drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
+                        }
+                        break;
+                    case Bonus.MALUS:
+                        if (spaceship.powerShoot > 1)
+                        {
+                            spaceship.powerShoot--;
+                        }
+                        else if (droneActive)
+                        {
+                            Destroy(drone.gameObject);
+                            droneActive = false;
+                        }
+                        break;
+                    default:
+                        Debug.Log("Undefined bonus.");
+                        break;
                 }
             }
         }
@@ -333,6 +338,19 @@ public class GameManager : MonoBehaviour
     public void ReduceEnemyCount()
     {
         enemyCount--;
+    }
+
+    public void ResetScore()
+    {
+        score = 0;
+        scoreText.text = score.ToString();
+    }
+
+    public void AddScore(int scoreToAdd)
+    {
+        // Update the score if under the max score we can reach
+        score = Mathf.Min(score + scoreToAdd, maxScore);
+        scoreText.text = score.ToString();
     }
 
     //Met fin à la partie en cours

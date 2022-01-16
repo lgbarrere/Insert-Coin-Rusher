@@ -31,7 +31,7 @@ public class FenteFuel : MonoBehaviour
         if (gameManager.UseCoin())
         {
             maPiece.animationIsON = true;
-            gameManager.AddFuel(3);
+            gameManager.AddFuel();
         }
     }
 }
