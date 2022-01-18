@@ -1145,6 +1145,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6565326691806090245, guid: cc03feeee5b30be4e8178353007eaddf, type: 3}
   m_PrefabInstance: {fileID: 6565326690627236621}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &1586247398 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6492693563262550289, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+  m_PrefabInstance: {fileID: 6329553141347092664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1628188883 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5349752916780498588, guid: cc03feeee5b30be4e8178353007eaddf, type: 3}
@@ -1668,24 +1673,24 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1825705406}
     m_Modifications:
+    - target: {fileID: 561708705047003290, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: m_Volume
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 561708705047003290, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: MinDistance
+      value: 0.3384242
+      objectReference: {fileID: 0}
+    - target: {fileID: 561708705047003290, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1780470749882019803, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1780470749882019803, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Volume
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 8eab06e38eb574041b6b62f57453235a, type: 3}
-    - target: {fileID: 0}
-      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3941932318063561474, guid: 4e06339b445958848a45c142910b1f00, type: 3}
@@ -1812,6 +1817,26 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 9158900522479843834, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: CanvasRect
+      value: 
+      objectReference: {fileID: 159128429}
+    - target: {fileID: 9158900522479843834, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: coinFeedback
+      value: 
+      objectReference: {fileID: 1939877487}
+    - target: {fileID: 9158900522479843834, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: coinMovingPos
+      value: 
+      objectReference: {fileID: 1939877486}
+    - target: {fileID: 9158900522479843834, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: inventoryTransform
+      value: 
+      objectReference: {fileID: 969600590}
+    - target: {fileID: 9158900522479843834, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: emergencyCoinSprite
+      value: 
+      objectReference: {fileID: 1586247398}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e06339b445958848a45c142910b1f00, type: 3}
 --- !u!82 &6329553141347092665 stripped
