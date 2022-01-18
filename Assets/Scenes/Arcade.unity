@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &2387404 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2763878301812250268, guid: 4e06339b445958848a45c142910b1f00, type: 3}
-  m_PrefabInstance: {fileID: 6329553141347092664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &83852809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6329553139830008258, guid: 4e06339b445958848a45c142910b1f00, type: 3}
@@ -1416,7 +1405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 700, y: -450}
+  m_AnchoredPosition: {x: 700, y: -430}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1941518081
@@ -1439,7 +1428,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 x
+  m_text: 0x
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1466,13 +1455,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1699,10 +1688,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainArcade
       objectReference: {fileID: 0}
-    - target: {fileID: 6329553139830008257, guid: 4e06339b445958848a45c142910b1f00, type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6329553139830008258, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1752,10 +1737,6 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
-      propertyPath: scoreText
-      value: 
-      objectReference: {fileID: 2387404}
-    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: newRoulette
       value: 
       objectReference: {fileID: 0}
@@ -1763,6 +1744,10 @@ PrefabInstance:
       propertyPath: uIController
       value: 
       objectReference: {fileID: 159128430}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: coinToInventorySound
+      value: 
+      objectReference: {fileID: 6329553141347092665}
     - target: {fileID: 6329553140242246483, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1787,9 +1772,25 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7545415835433816634, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7545415835433816634, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7957081260790159911, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: shootTimer
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8689901731005318891, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 467d231f40975204399e013d801f31e1, type: 3}
+    - target: {fileID: 8689901731005318891, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8930116575600389873, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_RootOrder
@@ -1797,6 +1798,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+--- !u!82 &6329553141347092665 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8689901731005318891, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+  m_PrefabInstance: {fileID: 6329553141347092664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6565326690627236621
 PrefabInstance:
   m_ObjectHideFlags: 0

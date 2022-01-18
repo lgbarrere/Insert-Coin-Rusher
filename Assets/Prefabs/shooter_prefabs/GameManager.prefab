@@ -469,6 +469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3786376908458349949}
   - component: {fileID: 4567112581567023480}
+  - component: {fileID: 3409133240931917225}
   - component: {fileID: 38107159}
   m_Layer: 0
   m_Name: GameManager
@@ -590,6 +591,102 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &3409133240931917225
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670347302327266788}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &38107159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,19 +699,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621c20eefacd49b47bfb183ba3610991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startFuel: 10
-  fuelMax: 10
   fuelLeft: 0
   enemyLimit: 10
   interfaceController: {fileID: 1032222574}
   uIController: {fileID: 0}
   fenteFuel: {fileID: 0}
   fenteBonus: {fileID: 0}
-  audioSource: {fileID: 0}
+  gameMusic: {fileID: 0}
+  coinToInventorySound: {fileID: 0}
   goSpaceship: {fileID: 7467910151494529966, guid: 068441f626a37384b84b0668e93714b3, type: 3}
   goEnemy: {fileID: 4566478308448307878, guid: 4aad2b9ef7f7c964e84e5a9cdd5615a7, type: 3}
   spaceship: {fileID: 0}
   roulette: {fileID: 0}
+  scoreText: {fileID: 0}
+  startFuel: 10
   nbCoins: 3
   isPlaying: 0
   goDrone: {fileID: 7399948868331734165, guid: d56635a754469514c8c5754bffde1263, type: 3}

@@ -4,13 +4,14 @@ public class FenteFuel : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
     [SerializeField] ArcadeCoinSlot maPiece;
-    
+    [SerializeField] AudioSource insertSound;
+
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
 
-    void OnMouseEnter()
+    void OnMouseOver()
     {
         if (gameManager.nbCoins > 0)
         {
@@ -32,6 +33,7 @@ public class FenteFuel : MonoBehaviour
         {
             maPiece.animationIsON = true;
             gameManager.AddFuel();
+            insertSound.Play();
         }
     }
 }

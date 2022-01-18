@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] UIController uIController;
     [SerializeField] FenteFuel fenteFuel;
     [SerializeField] FenteBonus fenteBonus;
-    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource gameMusic;
+    [SerializeField] AudioSource coinToInventorySound;
     [SerializeField] GameObject goSpaceship;
     [SerializeField] GameObject goEnemy;
     public Spaceship spaceship;
@@ -54,14 +55,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (gameMusic == null) gameMusic = GetComponent<AudioSource>();
 
         interfaceController.SetGameManager(this);
         fenteFuel.SetGameManager(this);
         fenteBonus.SetGameManager(this);
         nbCoins = maxCoins;
         uIController.SetCoinText(nbCoins);
+        uIController.SetCoinTextColor(new Color(255, 0, 0, 255));
         EndGame();
     }
 
@@ -121,6 +122,12 @@ public class GameManager : MonoBehaviour
         {
             nbCoins++;
             uIController.SetCoinText(nbCoins);
+            coinToInventorySound.Play();
+
+            if (MaxCoinReached())
+            {
+                uIController.SetCoinTextColor(new Color(255, 0, 0, 255)); // Red
+            }
         }
     }
 
@@ -129,6 +136,7 @@ public class GameManager : MonoBehaviour
         if (nbCoins > 0) {
             nbCoins--;
             uIController.SetCoinText(nbCoins);
+            uIController.SetCoinTextColor(new Color(255, 255, 255, 255)); // White
             return true;
         } else {
             return false;
@@ -170,7 +178,7 @@ public class GameManager : MonoBehaviour
         interfaceController.HideGameOver();
         interfaceController.SetFuel(fuelLeft);
 
-        audioSource.Play();
+        gameMusic.Play();
         
         //EnableControls();
         isPlaying = true;
@@ -380,7 +388,7 @@ public class GameManager : MonoBehaviour
         interfaceController.ShowGameOver();
         interfaceController.SetFuel(0);
 
-        audioSource.Stop();
+        gameMusic.Stop();
 
         isPlaying = false;
     }
