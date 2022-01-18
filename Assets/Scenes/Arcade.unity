@@ -1676,6 +1676,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8eab06e38eb574041b6b62f57453235a, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3941932318063561474, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1744,6 +1756,10 @@ PrefabInstance:
       propertyPath: uIController
       value: 
       objectReference: {fileID: 159128430}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: cannotPickCoinSound
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: coinToInventorySound
       value: 

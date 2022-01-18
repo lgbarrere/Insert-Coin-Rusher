@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class Coin : MonoBehaviour
 {
     [SerializeField] Animator animator;
-    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource coinFallSound;
+    [SerializeField] AudioSource cannotPickCoinSound;
     [SerializeField] GameManager gameManager;
     public Image coinFeedback;
     public RectTransform coinMovingPos;
@@ -16,7 +17,7 @@ public class Coin : MonoBehaviour
     void Start()
     {
         if (animator == null) animator = GetComponent<Animator>();
-        if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
+        if (coinFallSound == null) coinFallSound = GetComponentInChildren<AudioSource>();
         
         NextCoin();
     }
@@ -45,7 +46,7 @@ public class Coin : MonoBehaviour
 
     void PlaySound()
     {
-        audioSource.Play();
+        coinFallSound.Play();
     }
 
     void MoveCoinToInventory()
@@ -82,6 +83,10 @@ public class Coin : MonoBehaviour
             animator.SetTrigger("takeCoin");
             TriggerCoinMoving();
             NextCoin();
+        }
+        else
+        {
+            cannotPickCoinSound.Play();
         }
     }
 }
