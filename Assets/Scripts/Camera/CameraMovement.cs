@@ -19,36 +19,39 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Change the rotation speed
-        switch(cameraZoom.zoomState)
+        if (!Menu.pause)
         {
-            case CameraZoom.ZoomState.ZOOMED_IN:
-                cameraRotationSpeed = zoomedInRotationSpeed;
-                break;
-            case CameraZoom.ZoomState.ZOOMED_OUT:
-                cameraRotationSpeed = zoomedOutRotationSpeed;
-                break;
-            default:
-                cameraRotationSpeed = zoomingRotationSpeed;
-                break;
-        }
+            // Change the rotation speed
+            switch(cameraZoom.zoomState)
+            {
+                case CameraZoom.ZoomState.ZOOMED_IN:
+                    cameraRotationSpeed = zoomedInRotationSpeed;
+                    break;
+                case CameraZoom.ZoomState.ZOOMED_OUT:
+                    cameraRotationSpeed = zoomedOutRotationSpeed;
+                    break;
+                default:
+                    cameraRotationSpeed = zoomingRotationSpeed;
+                    break;
+            }
 
-        // Recenter the camera
-        if (Input.GetMouseButtonDown(1))
-        {
-            yRotation = 0;
-        }
+            // Recenter the camera
+            if (Input.GetMouseButtonDown(1))
+            {
+                yRotation = 0;
+            }
 
-        // Right or left rotation
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            yRotation -= cameraRotationSpeed * Time.deltaTime;
+            // Right or left rotation
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                yRotation -= cameraRotationSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.E))
+            {
+                yRotation += cameraRotationSpeed * Time.deltaTime;
+            }
+            yRotation = Mathf.Clamp(yRotation, minAngle, maxAngle);
+            transform.eulerAngles = new Vector3(0.0f, yRotation, 0.0f);
         }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.E))
-        {
-            yRotation += cameraRotationSpeed * Time.deltaTime;
-        }
-        yRotation = Mathf.Clamp(yRotation, minAngle, maxAngle);
-        transform.eulerAngles = new Vector3(0.0f, yRotation, 0.0f);
     }
 }

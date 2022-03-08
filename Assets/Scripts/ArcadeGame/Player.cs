@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -16,12 +14,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow)) {
-            rb.AddForce(Vector2.left * moveSpeed);
-            Debug.Log("Gauche");
-        } else if (Input.GetKey(KeyCode.RightArrow)) {
-            rb.AddForce(Vector2.right * moveSpeed);
-            Debug.Log("Droite");
+        if (!Menu.pause)
+        {
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rb.AddForce(Vector2.left * moveSpeed);
+                Debug.Log("Gauche");
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rb.AddForce(Vector2.right * moveSpeed);
+                Debug.Log("Droite");
+            }
         }
     }
 }

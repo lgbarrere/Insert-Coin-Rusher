@@ -13,27 +13,26 @@ public class EnemyEye : MonoBehaviour
 
     Vector2 moveVector;
     GameManager gameManager;
-    private bool alive = true;
+    private bool isDying = false;
     
     void Awake()
     {
         StartCoroutine(ChooseDirection());
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        tag = "Enemy";
     }
 
     IEnumerator ChooseDirection()
     {
         while (true)
         {
-            float rnd = Random.Range(-1f, 1f);
-            moveVector = new Vector2(rnd, 0);
+            moveVector.x = Random.Range(-1f, 1f);
 
             yield return new WaitForSeconds(0.5f);
         }
@@ -53,9 +52,9 @@ public class EnemyEye : MonoBehaviour
     {
         health -= gameManager.spaceship.powerShoot;
 
-        if (health <= 0 && alive)
+        if (health <= 0 && !isDying)
         {
-            alive = false;
+            isDying = true;
             StartCoroutine(Kill());
         }
     }

@@ -35,9 +35,12 @@ public class Spaceship : MonoBehaviour
     {
         GetMovement();
 
-        if (Input.GetKey(KeyCode.Space))
+        if (!Menu.pause)
         {
-            Shoot();
+            if (Input.GetKey(KeyCode.Space))
+            {
+                Shoot();
+            }
         }
     }
 

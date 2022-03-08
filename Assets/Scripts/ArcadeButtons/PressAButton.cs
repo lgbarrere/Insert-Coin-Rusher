@@ -4,9 +4,18 @@ public class PressAButton : MonoBehaviour
 {
     public Animator animator;
 
-    // Update is called once per frame
     void Update()
     {
-        animator.SetBool("is_pressed", Input.GetKey(KeyCode.Space));
+        if (!Menu.pause)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                animator.SetBool("is_pressed", true);
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                animator.SetBool("is_pressed", false);
+            }
+        }
     }
 }

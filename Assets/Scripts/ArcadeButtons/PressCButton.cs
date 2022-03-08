@@ -4,16 +4,18 @@ public class PressCButton : MonoBehaviour
 {
     public Animator animator;
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("l") && !animator.GetBool("is_pressed"))
+        if (!Menu.pause)
         {
-            animator.SetBool("is_pressed", true);
-        }
-        else if (Input.GetKeyUp("l") && animator.GetBool("is_pressed"))
-        {
-            animator.SetBool("is_pressed", false);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                animator.SetBool("is_pressed", true);
+            }
+            else if (Input.GetKeyUp(KeyCode.L))
+            {
+                animator.SetBool("is_pressed", false);
+            }
         }
     }
 }

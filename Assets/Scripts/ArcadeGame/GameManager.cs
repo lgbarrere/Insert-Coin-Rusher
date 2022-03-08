@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
                 rndPosY = Random.Range(0, 2);
                 startY = .85f - 0.2f * rndPosY;
 
-                Vector3 startPos = new Vector3(startX, startY, 0);
+                Vector3 startPos = new(startX, startY, 0);
 
                 //Crée un ennemi à la position calculée
                 GameObject enemy = Instantiate(goEnemy, transform, false);

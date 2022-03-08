@@ -78,15 +78,18 @@ public class Coin : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!gameManager.MaxCoinReached())
+        if (!Menu.pause)
         {
-            animator.SetTrigger("takeCoin");
-            TriggerCoinMoving();
-            NextCoin();
-        }
-        else
-        {
-            cannotPickCoinSound.Play();
+            if (!gameManager.MaxCoinReached())
+            {
+                animator.SetTrigger("takeCoin");
+                TriggerCoinMoving();
+                NextCoin();
+            }
+            else
+            {
+                cannotPickCoinSound.Play();
+            }
         }
     }
 }

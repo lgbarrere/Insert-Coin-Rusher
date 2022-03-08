@@ -13,27 +13,36 @@ public class FenteFuel : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (gameManager.nbCoins > 0)
+        if (!Menu.pause)
         {
-            maPiece.Apparition();
+            if (gameManager.nbCoins > 0)
+            {
+                maPiece.Apparition();
+            }
         }
     }
 
     void OnMouseExit()
     {
-        if (!maPiece.animationIsON)
+        if (!Menu.pause)
         {
-            maPiece.Disparition();
+            if (!maPiece.animationIsON)
+            {
+                maPiece.Disparition();
+            }
         }
     }
 
     void OnMouseDown()
     {
-        if (gameManager.UseCoin())
+        if (!Menu.pause)
         {
-            maPiece.animationIsON = true;
-            gameManager.AddFuel();
-            insertSound.Play();
+            if (gameManager.UseCoin())
+            {
+                maPiece.animationIsON = true;
+                gameManager.AddFuel();
+                insertSound.Play();
+            }
         }
     }
 }

@@ -13,29 +13,38 @@ public class FenteBonus : MonoBehaviour
 
     void OnMouseOver()
     {
-        if (gameManager.nbCoins > 0 && gameManager.isPlaying)
+        if (!Menu.pause)
         {
-            maPiece.Apparition();
+            if (gameManager.nbCoins > 0 && gameManager.isPlaying)
+            {
+                maPiece.Apparition();
+            }
         }
     }
 
     void OnMouseExit()
     {
-        if (!maPiece.animationIsON)
+        if (!Menu.pause)
         {
-            maPiece.Disparition();
+            if (!maPiece.animationIsON)
+            {
+                maPiece.Disparition();
+            }
         }
     }
 
     void OnMouseDown()
     {
-        if (!gameManager.isPlaying) return;
-
-        if (gameManager.UseCoin())
+        if (!Menu.pause)
         {
-            maPiece.animationIsON = true;
-            gameManager.LaunchRoulette();
-            insertSound.Play();
+            if (!gameManager.isPlaying) return;
+
+            if (gameManager.UseCoin())
+            {
+                maPiece.animationIsON = true;
+                gameManager.LaunchRoulette();
+                insertSound.Play();
+            }
         }
     }
 }

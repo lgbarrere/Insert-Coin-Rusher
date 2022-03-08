@@ -27,45 +27,48 @@ public class CameraZoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float step = moveSpeed * Time.deltaTime;
-
-        switch (zoomState)
+        if (!Menu.pause)
         {
-            // Try to zoom in
-            case ZoomState.ZOOMED_OUT:
-            case ZoomState.ZOOMING_OUT:
-                if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-                {
-                    targetPosition = zoomInPosition;
-                    zoomState = ZoomState.ZOOMING_IN;
-                }
-                break;
-            // Try to zoom out
-            case ZoomState.ZOOMED_IN:
-            case ZoomState.ZOOMING_IN:
-                if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-                {
-                    targetPosition = zoomOutPosition;
-                    zoomState = ZoomState.ZOOMING_OUT;
-                }
-                break;
-        }
-        // If zooming in or out, update camera's position
-        if(zoomState == ZoomState.ZOOMING_IN || zoomState == ZoomState.ZOOMING_OUT)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+            float step = moveSpeed * Time.deltaTime;
 
-            // If the camera is close enough to the target, consider the target is reached
-            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+            switch (zoomState)
             {
-                transform.position = targetPosition;
-                if(zoomState == ZoomState.ZOOMING_IN)
+                // Try to zoom in
+                case ZoomState.ZOOMED_OUT:
+                case ZoomState.ZOOMING_OUT:
+                    if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+                    {
+                        targetPosition = zoomInPosition;
+                        zoomState = ZoomState.ZOOMING_IN;
+                    }
+                    break;
+                // Try to zoom out
+                case ZoomState.ZOOMED_IN:
+                case ZoomState.ZOOMING_IN:
+                    if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+                    {
+                        targetPosition = zoomOutPosition;
+                        zoomState = ZoomState.ZOOMING_OUT;
+                    }
+                    break;
+            }
+            // If zooming in or out, update camera's position
+            if (zoomState == ZoomState.ZOOMING_IN || zoomState == ZoomState.ZOOMING_OUT)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+
+                // If the camera is close enough to the target, consider the target is reached
+                if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
                 {
-                    zoomState = ZoomState.ZOOMED_IN;
-                }
-                else
-                {
-                    zoomState = ZoomState.ZOOMED_OUT;
+                    transform.position = targetPosition;
+                    if (zoomState == ZoomState.ZOOMING_IN)
+                    {
+                        zoomState = ZoomState.ZOOMED_IN;
+                    }
+                    else
+                    {
+                        zoomState = ZoomState.ZOOMED_OUT;
+                    }
                 }
             }
         }

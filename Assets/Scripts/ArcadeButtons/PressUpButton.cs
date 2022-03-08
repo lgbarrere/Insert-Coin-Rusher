@@ -4,16 +4,18 @@ public class PressUpButton : MonoBehaviour
 {
     public Animator animator;
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("z") && !animator.GetBool("is_pressed"))
+        if (!Menu.pause)
         {
-            animator.SetBool("is_pressed", true);
-        }
-        else if (Input.GetKeyUp("z") && animator.GetBool("is_pressed"))
-        {
-            animator.SetBool("is_pressed", false);
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                animator.SetBool("is_pressed", true);
+            }
+            else if (Input.GetKeyUp(KeyCode.Z))
+            {
+                animator.SetBool("is_pressed", false);
+            }
         }
     }
 }
