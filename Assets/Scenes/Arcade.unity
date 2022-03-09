@@ -3484,6 +3484,14 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: goScore
+      value: 
+      objectReference: {fileID: 1141433809}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: goHighScore
+      value: 
+      objectReference: {fileID: 1546958301}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: newRoulette
       value: 
       objectReference: {fileID: 0}
@@ -3491,6 +3499,14 @@ PrefabInstance:
       propertyPath: uIController
       value: 
       objectReference: {fileID: 159128430}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: pauseScoreText
+      value: 
+      objectReference: {fileID: 1141433811}
+    - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
+      propertyPath: pauseHighScoreText
+      value: 
+      objectReference: {fileID: 1546958303}
     - target: {fileID: 6329553139894821717, guid: 4e06339b445958848a45c142910b1f00, type: 3}
       propertyPath: cannotPickCoinSound
       value: 

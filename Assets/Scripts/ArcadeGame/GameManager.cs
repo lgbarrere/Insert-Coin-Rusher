@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public enum Bonus
 {
@@ -29,30 +30,34 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
 
     // The elements in game
-    public const int fuelMax = 10; //Carburant max
-    [SerializeField] int startFuel = fuelMax; //Carburant en début de partie
+    public const int MAX_FUEL = 10; //Carburant max
+    [SerializeField] int startFuel = MAX_FUEL; //Carburant en début de partie
     int enemyCount; //Compteur d'ennemis
     float timeCounter; //Compteur de temps
-    public const int maxCoins = 3;
-    public int nbCoins = maxCoins;
+    public const int MAX_COIN = 3;
+    public int nbCoins = MAX_COIN;
     bool canControl = false;
     public bool isPlaying = false;
     bool timerActive = false;
     public GameObject goDrone;
     private DroneManager drone;
     private bool droneActive = false;
-    private readonly int maxScore = 10000000;
-    private int score = 0;
+    private const int MAX_SCORE = 10000000;
+    public static int score = 0;
+    public static int highScore = 0;
 
     // The elements of the roulette
-    private const float rouletteTimer = 2f;
-    private const float rouletteIconTimer = 0.2f;
+    private const float ROULETTE_TIMER = 2f;
+    private const float ROULETTE_ICON_TIMER = 0.2f;
     private float rouletteCurrentTime = 0f;
     private float rouletteIconCurrentTime = 0f;
-    private int iconID = 0;
+    public static int iconID = 0;
     private bool activeRoulette = false;
 
-    // Start is called before the first frame update
+    // The pause menu to update
+    public Text pauseScoreText;
+    public Text pauseHighScoreText;
+
     void Start()
     {
         if (gameMusic == null) gameMusic = GetComponent<AudioSource>();
@@ -60,13 +65,13 @@ public class GameManager : MonoBehaviour
         interfaceController.SetGameManager(this);
         fenteFuel.SetGameManager(this);
         fenteBonus.SetGameManager(this);
-        nbCoins = maxCoins;
+        nbCoins = MAX_COIN;
         uIController.SetCoinText(nbCoins);
         uIController.SetCoinTextColor(new Color(255, 0, 0, 255));
+        LoadHighScore();
         EndGame();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Si le timer atteint 0 ou le joueur se fait toucher, la partie se termine
@@ -95,6 +100,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SaveHighScore()
+    {
+        SaveSystem.SaveData(highScore);
+    }
+
+    public void LoadHighScore()
+    {
+        GameData data = SaveSystem.LoadData();
+        if(data != null)
+        {
+            highScore = data.score;
+            SetHighscoreText();
+        }
+        else
+        {
+            highScore = 0;
+        }
+    }
+
     //Active les contrôles
     public void EnableControls()
     {
@@ -109,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     public bool MaxCoinReached()
     {
-        if (nbCoins < maxCoins)
+        if (nbCoins < MAX_COIN)
         {
             return false;
         }
@@ -232,10 +256,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddFuel(int amount = fuelMax)
+    public void AddFuel(int amount = MAX_FUEL)
     {
         if (isPlaying) {
-            fuelLeft = Mathf.Min(fuelLeft + amount, fuelMax);
+            fuelLeft = Mathf.Min(fuelLeft + amount, MAX_FUEL);
             UpdateFuel();
         } else if (canControl) {
             StartGame();
@@ -279,15 +303,15 @@ public class GameManager : MonoBehaviour
         rouletteCurrentTime += Time.deltaTime;
         rouletteIconCurrentTime += Time.deltaTime;
 
-        if (rouletteIconCurrentTime >= rouletteIconTimer)
+        if (rouletteIconCurrentTime >= ROULETTE_ICON_TIMER)
         {
-            rouletteIconCurrentTime -= rouletteIconTimer;
+            rouletteIconCurrentTime -= ROULETTE_ICON_TIMER;
             // ChangeIcon
             iconID = (iconID + Random.Range(0, 5) + 1) % 6;
             roulette.SetInteger("BonusID", iconID);
 
             // Reset roulette
-            if (rouletteCurrentTime >= rouletteTimer)
+            if (rouletteCurrentTime >= ROULETTE_TIMER)
             {
                 rouletteCurrentTime = 0;
                 rouletteIconCurrentTime = 0;
@@ -302,7 +326,7 @@ public class GameManager : MonoBehaviour
                         spaceship.Shield();
                         break;
                     case Bonus.FUEL:
-                        AddFuel(fuelMax / 3);
+                        AddFuel(MAX_FUEL / 3);
                         break;
                     case Bonus.POWER:
                         if (spaceship.powerShoot < spaceship.maxPowerShoot)
@@ -352,18 +376,38 @@ public class GameManager : MonoBehaviour
     {
         score = 0;
         scoreText.text = score.ToString();
+        SetScoreText();
     }
 
     public void AddScore(int scoreToAdd)
     {
         // Update the score if under the max score we can reach
-        score = Mathf.Min(score + scoreToAdd, maxScore);
+        score = Mathf.Min(score + scoreToAdd, MAX_SCORE);
         scoreText.text = score.ToString();
+        SetScoreText();
+    }
+
+    private void SetScoreText()
+    {
+        pauseScoreText.text = "Score actuel : " + score.ToString();
+    }
+
+    private void SetHighscoreText()
+    {
+        pauseHighScoreText.text = "Highscore : " + highScore.ToString();
     }
 
     //Met fin à la partie en cours
     void EndGame()
     {
+        // Save the score as highscore and reset it
+        if(score > highScore)
+        {
+            highScore = score;
+            SetHighscoreText();
+        }
+        SaveHighScore();
+
         //Désactive le timer
         timerActive = false;
 
