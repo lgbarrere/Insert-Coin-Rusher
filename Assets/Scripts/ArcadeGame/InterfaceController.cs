@@ -12,7 +12,6 @@ public class InterfaceController : MonoBehaviour
     [SerializeField] Slider slider;
     AudioSource audioSourceSlider;
     
-    // Start is called before the first frame update
     void Start()
     {
         audioSourceSlider = slider.GetComponent<AudioSource>();

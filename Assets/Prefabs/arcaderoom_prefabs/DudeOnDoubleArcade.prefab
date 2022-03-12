@@ -565,7 +565,8 @@ MonoBehaviour:
   coinMovingPos: {fileID: 0}
   inventoryTransform: {fileID: 0}
   CanvasRect: {fileID: 0}
-  coinMovingSpeed: 50
+  coinMovingSpeed: 3000
+  successManager: {fileID: 0}
 --- !u!212 &6663747903990081096
 SpriteRenderer:
   m_ObjectHideFlags: 0

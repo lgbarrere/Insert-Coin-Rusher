@@ -5,6 +5,7 @@ public class FenteFuel : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] ArcadeCoinSlot maPiece;
     [SerializeField] AudioSource insertSound;
+    public SuccessManager successManager;
 
     public void SetGameManager(GameManager gameManager)
     {
@@ -40,6 +41,10 @@ public class FenteFuel : MonoBehaviour
             if (gameManager.UseCoin())
             {
                 maPiece.animationIsON = true;
+                if (gameManager.isPlaying)
+                {
+                    successManager.UpdateFullGasSuccess();
+                }
                 gameManager.AddFuel();
                 insertSound.Play();
             }

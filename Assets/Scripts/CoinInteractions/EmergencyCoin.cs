@@ -1,28 +1,18 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Coin : MonoBehaviour
+public class EmergencyCoin : MonoBehaviour
 {
-    [SerializeField] Animator animator;
-    [SerializeField] AudioSource coinFallSound;
     [SerializeField] AudioSource cannotPickCoinSound;
     [SerializeField] GameManager gameManager;
     public Image coinFeedback;
     public RectTransform coinMovingPos;
     public RectTransform inventoryTransform;
     public RectTransform canvasRect;
+    public SpriteRenderer emergencyCoinSprite;
+    public SphereCollider coinCollider;
     public float coinMovingSpeed = 3000f;
-    public SuccessManager successManager;
     private bool isCoinMoving = false;
-
-    void Start()
-    {
-        if (animator == null) animator = GetComponent<Animator>();
-        if (coinFallSound == null) coinFallSound = GetComponentInChildren<AudioSource>();
-        
-        NextCoin();
-    }
 
     void Update()
     {
@@ -30,24 +20,6 @@ public class Coin : MonoBehaviour
         {
             MoveCoinToInventory();
         }
-    }
-
-    private void NextCoin()
-    {
-        int rnd = Random.Range(5, 15);
-        StartCoroutine(MakeCoin(rnd));
-    }
-
-    private IEnumerator MakeCoin(int wait)
-    {
-        yield return new WaitForSeconds(wait);
-
-        animator.SetTrigger("makeCoin");
-    }
-
-    private void PlaySound()
-    {
-        coinFallSound.Play();
     }
 
     private void MoveCoinToInventory()
@@ -60,7 +32,6 @@ public class Coin : MonoBehaviour
         {
             ResetMovingCoin();
             gameManager.AddCoin();
-            successManager.UpdateMendicantSuccess();
         }
     }
 
@@ -81,18 +52,15 @@ public class Coin : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!Menu.pause)
+        if (!gameManager.MaxCoinReached())
         {
-            if (!gameManager.MaxCoinReached())
-            {
-                animator.SetTrigger("takeCoin");
-                TriggerCoinMoving();
-                NextCoin();
-            }
-            else
-            {
-                cannotPickCoinSound.Play();
-            }
+            TriggerCoinMoving();
+            coinCollider.enabled = false;
+            emergencyCoinSprite.enabled = false;
+        }
+        else
+        {
+            cannotPickCoinSound.Play();
         }
     }
 }

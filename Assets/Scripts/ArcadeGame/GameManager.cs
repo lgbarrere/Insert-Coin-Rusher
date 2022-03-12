@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     // The pause menu to update
     public Text pauseScoreText;
     public Text pauseHighScoreText;
+    public SuccessManager successManager;
 
     void Start()
     {
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
         uIController.SetCoinTextColor(new Color(255, 0, 0, 255));
         LoadHighScore();
         EndGame();
+        successManager.InitializeSuccess();
     }
 
     void Update()
@@ -268,13 +270,16 @@ public class GameManager : MonoBehaviour
 
     void CleanEnnemies()
     {
-        //Destruction des ennemis restants
-        Component[] enemies = GetComponentsInChildren<EnemyEye>();
-        foreach (EnemyEye enemy in enemies)
+        if (enemyCount != 0)
         {
-            Destroy(enemy.gameObject);
+            //Destruction des ennemis restants
+            Component[] enemies = GetComponentsInChildren<EnemyEye>();
+            foreach (EnemyEye enemy in enemies)
+            {
+                Destroy(enemy.gameObject);
+            }
+            enemyCount = 0;
         }
-        enemyCount = 0;
     }
 
     public void LaunchRoulette()
@@ -337,6 +342,7 @@ public class GameManager : MonoBehaviour
                     case Bonus.CLEAR:
                         AddScore(enemyCount);
                         AddFuel(2 * enemyCount);
+                        successManager.UpdateMassacreSuccess(enemyCount);
                         CleanEnnemies();
                         break;
                     case Bonus.DRONE:
@@ -370,6 +376,7 @@ public class GameManager : MonoBehaviour
     public void ReduceEnemyCount()
     {
         enemyCount--;
+        successManager.UpdateMassacreSuccess();
     }
 
     public void ResetScore()
@@ -431,6 +438,9 @@ public class GameManager : MonoBehaviour
         //Mise à jour de l'interface
         interfaceController.ShowGameOver();
         interfaceController.SetFuel(0);
+
+        // Reset success
+        successManager.ResetFullGasSuccess();
 
         gameMusic.Stop();
 
