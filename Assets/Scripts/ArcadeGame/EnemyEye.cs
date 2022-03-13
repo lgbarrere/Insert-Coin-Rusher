@@ -48,12 +48,20 @@ public class EnemyEye : MonoBehaviour
         rb.AddForce(movement * speed);
     }
 
-    public void DealDamage()
+    public void DealDamage(bool shotByDrone)
     {
         health -= gameManager.spaceship.powerShoot;
 
         if (health <= 0 && !isDying)
         {
+            if (shotByDrone)
+            {
+                gameManager.successManager.UpdateAssistedSuccess();
+            }
+            else
+            {
+                gameManager.successManager.ResetAssistedSuccess();
+            }
             isDying = true;
             StartCoroutine(Kill());
         }

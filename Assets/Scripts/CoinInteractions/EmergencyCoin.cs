@@ -13,6 +13,7 @@ public class EmergencyCoin : MonoBehaviour
     public SphereCollider coinCollider;
     public float coinMovingSpeed = 3000f;
     private bool isCoinMoving = false;
+    public SuccessManager successManager;
 
     void Update()
     {
@@ -55,6 +56,7 @@ public class EmergencyCoin : MonoBehaviour
         if (!gameManager.MaxCoinReached())
         {
             TriggerCoinMoving();
+            successManager.StartPacifistSuccess();
             coinCollider.enabled = false;
             emergencyCoinSprite.enabled = false;
         }

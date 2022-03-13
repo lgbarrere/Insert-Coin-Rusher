@@ -20,7 +20,6 @@ public class Spaceship : MonoBehaviour
     bool canShoot = false; //Détermine s'il est possible de tirer
     float shootDelay = 0.25f; //Délai entre chaque tir
     
-    // Start is called before the first frame update
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -30,7 +29,6 @@ public class Spaceship : MonoBehaviour
         StartCoroutine(ShootDelay(shootDelay * 2f)); //Empêche le joueur de tirer instantanément
     }
 
-    // Update is called once per frame
     void Update()
     {
         GetMovement();
@@ -53,12 +51,14 @@ public class Spaceship : MonoBehaviour
     //Récupère l'input du joueur pour le déplacement
     void GetMovement()
     {
-        horizontalMove = Input.GetAxisRaw("Horizontal"); //Input de l'axe horizontal
-        verticalMove = Input.GetAxisRaw("Vertical"); //Input de l'axe vertical
-        moveVector = new Vector2(horizontalMove, verticalMove); //Vector2D du déplacement
-
+        if (!Menu.pause)
+        {
+            horizontalMove = Input.GetAxisRaw("Horizontal"); //Input de l'axe horizontal
+            verticalMove = Input.GetAxisRaw("Vertical"); //Input de l'axe vertical
+            moveVector = new Vector2(horizontalMove, verticalMove); //Vector2D du déplacement
             animator.SetBool("left", Input.GetKey(KeyCode.Q));
             animator.SetBool("right", Input.GetKey(KeyCode.D));
+        }
     }
 
     //Déplace le vaisseau en fonction du mouvement donné
@@ -83,6 +83,7 @@ public class Spaceship : MonoBehaviour
     {
         audioSource.Play();
         yield return new WaitForSeconds(audioSource.clip.length);
+        gameManager.successManager.ResetAssistedSuccess();
         Destroy(gameObject);
     }
 
@@ -93,7 +94,7 @@ public class Spaceship : MonoBehaviour
         {
             Vector3 startPos = transform.position;
             startPos.y += 0.05f;
-            Instantiate(projectile, startPos, Quaternion.identity);
+            Instantiate(projectile, startPos, Quaternion.identity).GetComponent<Projectile>();
             canShoot = false;
             StartCoroutine(ShootDelay(shootDelay));
         }
@@ -116,10 +117,5 @@ public class Spaceship : MonoBehaviour
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
-    }
-
-    void EnableControls()
-    {
-        gameManager.EnableControls();
     }
 }

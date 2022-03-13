@@ -74,6 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  successManager: {fileID: 1294633623067175146, guid: 0671b50f28bec7e4eb1af3302f3fb4b5, type: 3}
 --- !u!82 &1362964795822016804
 AudioSource:
   m_ObjectHideFlags: 0

@@ -11,7 +11,6 @@ public class DroneManager : MonoBehaviour
     private const float moveSpeed = 0.5f;
     bool moveLeft = true;
 
-    // Update is called once per frame
     void Update()
     {
         shootCurrentTime += Time.deltaTime;

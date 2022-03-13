@@ -4,21 +4,24 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+        transform.Translate(speed * Time.deltaTime * Vector2.up);
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.CompareTag("Enemy"))
         {
-            col.transform.GetComponent<EnemyEye>().DealDamage();
+            bool droneShoot = false;
+            if (name == "DroneProjectile(Clone)")
+            {
+                droneShoot = true;
+            }
+            col.transform.GetComponent<EnemyEye>().DealDamage(droneShoot);
             Destroy(gameObject);
         }
-
-        if (col.gameObject.tag == "ProjectileDestroyer")
+        else if (col.gameObject.CompareTag("ProjectileDestroyer"))
         {
             Destroy(gameObject);
         }

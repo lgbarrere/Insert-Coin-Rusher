@@ -59,6 +59,13 @@ public class GameManager : MonoBehaviour
     public Text pauseHighScoreText;
     public SuccessManager successManager;
 
+    // Available spaceship control keys
+    KeyCode[] spaceshipInputs = {
+            KeyCode.Z, KeyCode.Q, KeyCode.S, KeyCode.D,
+            KeyCode.Space, KeyCode.J, KeyCode.K
+        };
+    KeyCode firstKeyPressed = KeyCode.None;
+
     void Start()
     {
         if (gameMusic == null) gameMusic = GetComponent<AudioSource>();
@@ -71,7 +78,6 @@ public class GameManager : MonoBehaviour
         uIController.SetCoinTextColor(new Color(255, 0, 0, 255));
         LoadHighScore();
         EndGame();
-        successManager.InitializeSuccess();
     }
 
     void Update()
@@ -99,6 +105,41 @@ public class GameManager : MonoBehaviour
         if (activeRoulette)
         {
             RandomBonus();
+        }
+
+        // Update success
+        if (isPlaying)
+        {
+            successManager.UpdatePacifist();
+            GetFirstControlKeyHeld();
+        }
+    }
+
+    private void GetFirstControlKeyHeld()
+    {
+        if (firstKeyPressed == KeyCode.None)
+        {
+            foreach (KeyCode key in spaceshipInputs)
+            {
+                if (Input.GetKeyDown(key))
+                {
+                    firstKeyPressed = key;
+                    successManager.UpdateCheatCodeSuccess(firstKeyPressed);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            if (!Input.GetKey(firstKeyPressed))
+            {
+                firstKeyPressed = KeyCode.None;
+            }
+            // If true, the cheat code is correct and activates a CLEAR
+            if(successManager.UpdateCheatCodeSuccess(firstKeyPressed))
+            {
+                ApplyBonus(Bonus.CLEAR);
+            }
         }
     }
 
@@ -198,7 +239,7 @@ public class GameManager : MonoBehaviour
         startPos.z = -0.65f;
         spaceship = Instantiate(goSpaceship, startPos, Quaternion.identity).GetComponent<Spaceship>();
         spaceship.transform.parent = transform;
-        spaceship.GetComponent<Spaceship>().SetGameManager(this);
+        spaceship.SetGameManager(this);
         
         //Mise à jour de l'interface
         interfaceController.HideGameOver();
@@ -300,7 +341,76 @@ public class GameManager : MonoBehaviour
             rouletteIconCurrentTime = 0f;
             roulette.SetBool("Choosing", false);
         }
-        roulette.SetBool("Launch", false);
+    }
+
+    private void ChangeIcon(int bonusID)
+    {
+        if (roulette.GetInteger("BonusID") != bonusID)
+        {
+            if (!roulette.GetBool("Launch"))
+            {
+                roulette.SetBool("Launch", true);
+            }
+            roulette.SetInteger("BonusID", bonusID);
+        }
+    }
+
+    private void DestroyDrone()
+    {
+        if (droneActive)
+        {
+            successManager.ResetAssistedSuccess();
+            Destroy(drone.gameObject);
+            droneActive = false;
+        }
+    }
+
+    public void ApplyBonus(Bonus bonus)
+    {
+        ChangeIcon((int)bonus);
+        switch (bonus)
+        {
+            case Bonus.SHIELD:
+                spaceship.Shield();
+                break;
+            case Bonus.FUEL:
+                AddFuel(MAX_FUEL / 3);
+                break;
+            case Bonus.POWER:
+                if (spaceship.powerShoot < spaceship.maxPowerShoot)
+                {
+                    spaceship.powerShoot++;
+                }
+                break;
+            case Bonus.CLEAR:
+                AddScore(enemyCount);
+                AddFuel(2 * enemyCount);
+                successManager.UpdateMassacreSuccess(enemyCount);
+                CleanEnnemies();
+                break;
+            case Bonus.DRONE:
+                if (!droneActive)
+                {
+                    droneActive = true;
+                    Vector3 startPos = spaceship.transform.position;
+                    startPos.y += 0.2f;
+                    drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
+                }
+                break;
+            case Bonus.MALUS:
+                if (spaceship.powerShoot > 1)
+                {
+                    spaceship.powerShoot--;
+                }
+                else
+                {
+                    DestroyDrone();
+                }
+                break;
+            default:
+                break;
+        }
+        ResetRoulette();
     }
 
     public void RandomBonus()
@@ -311,64 +421,14 @@ public class GameManager : MonoBehaviour
         if (rouletteIconCurrentTime >= ROULETTE_ICON_TIMER)
         {
             rouletteIconCurrentTime -= ROULETTE_ICON_TIMER;
-            // ChangeIcon
+            // Get another random icon
             iconID = (iconID + Random.Range(0, 5) + 1) % 6;
-            roulette.SetInteger("BonusID", iconID);
+            ChangeIcon(iconID);
 
-            // Reset roulette
             if (rouletteCurrentTime >= ROULETTE_TIMER)
             {
-                rouletteCurrentTime = 0;
-                rouletteIconCurrentTime = 0;
-                activeRoulette = false;
-                roulette.SetBool("Choosing", false);
-
-                //Bonus
                 Bonus bonus = (Bonus)iconID;
-                switch (bonus)
-                {
-                    case Bonus.SHIELD:
-                        spaceship.Shield();
-                        break;
-                    case Bonus.FUEL:
-                        AddFuel(MAX_FUEL / 3);
-                        break;
-                    case Bonus.POWER:
-                        if (spaceship.powerShoot < spaceship.maxPowerShoot)
-                        {
-                            spaceship.powerShoot++;
-                        }
-                        break;
-                    case Bonus.CLEAR:
-                        AddScore(enemyCount);
-                        AddFuel(2 * enemyCount);
-                        successManager.UpdateMassacreSuccess(enemyCount);
-                        CleanEnnemies();
-                        break;
-                    case Bonus.DRONE:
-                        if (!droneActive)
-                        {
-                            droneActive = true;
-                            Vector3 startPos = spaceship.transform.position;
-                            startPos.y += 0.2f;
-                            drone = Instantiate(goDrone, startPos, Quaternion.identity).GetComponent<DroneManager>();
-                        }
-                        break;
-                    case Bonus.MALUS:
-                        if (spaceship.powerShoot > 1)
-                        {
-                            spaceship.powerShoot--;
-                        }
-                        else if (droneActive)
-                        {
-                            Destroy(drone.gameObject);
-                            droneActive = false;
-                        }
-                        break;
-                    default:
-                        Debug.Log("Undefined bonus.");
-                        break;
-                }
+                ApplyBonus(bonus);
             }
         }
     }
@@ -389,6 +449,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int scoreToAdd)
     {
         // Update the score if under the max score we can reach
+        successManager.UpdateSpeedrunSuccess(scoreToAdd);
         score = Mathf.Min(score + scoreToAdd, MAX_SCORE);
         scoreText.text = score.ToString();
         SetScoreText();
@@ -425,15 +486,11 @@ public class GameManager : MonoBehaviour
 
         //Destruction du vaisseau
         if (spaceship != null) DestroyImmediate(spaceship.gameObject, true);
+        DestroyDrone();
 
-        // Drone destruction if active
-        if (droneActive)
-        {
-            DestroyImmediate(drone.gameObject, true);
-            droneActive = false;
-        }
-
+        // Reset roulette and remove icon
         ResetRoulette();
+        roulette.SetBool("Launch", false);
 
         //Mise à jour de l'interface
         interfaceController.ShowGameOver();
@@ -441,9 +498,11 @@ public class GameManager : MonoBehaviour
 
         // Reset success
         successManager.ResetFullGasSuccess();
+        successManager.CancelPacifistSuccess();
+        successManager.ResetSpeedrunSuccess();
+        successManager.ResetCheatCodeSuccess();
 
         gameMusic.Stop();
-
         isPlaying = false;
     }
 }

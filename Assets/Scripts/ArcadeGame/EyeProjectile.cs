@@ -11,13 +11,12 @@ public class EyeProjectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Spaceship")
+        if (col.gameObject.CompareTag("Spaceship"))
         {
             col.transform.GetComponent<Spaceship>().DealDamage();
             Destroy(gameObject);
         }
-
-        if (col.gameObject.tag == "ProjectileDestroyer")
+        else if (col.gameObject.CompareTag("ProjectileDestroyer"))
         {
             Destroy(gameObject);
         }
