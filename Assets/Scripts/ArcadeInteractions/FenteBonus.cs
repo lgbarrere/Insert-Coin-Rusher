@@ -27,7 +27,6 @@ public class FenteBonus : MonoBehaviour
             {
                 nbInsertedCoins = 0;
                 insertCoinsTimer = 0;
-                Debug.Log("Stopped speedrun triggerer");
             }
         }
     }

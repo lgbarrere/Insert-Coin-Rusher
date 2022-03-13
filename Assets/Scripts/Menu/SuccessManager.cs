@@ -20,29 +20,41 @@ public class SuccessManager : MonoBehaviour
     // Variables
     private Image[] successImages;
     private readonly bool[] successIDs = new bool[10];
+    // Full gas success
     private int nbFuelSlotUses = 0;
     private const int MAX_FUEL_SLOT_USES = 30;
+    // Mendicant success
     private int nbPickedUpCoin = 0;
     private const int MAX_PICKED_UP_COIN = 50;
+    // Massacre success
     private int nbEnemiesKilled = 0;
     private const int MAX_ENEMY_KILLED = 300;
+    // Pacifist success
     private bool startedPacifistSuccess = false;
     private float pacifistTimer = 0;
     private const float PACIFIST_TIME_SUCCESS = 120f;
+    // Speedrun success
     private bool startedSpeedrunSuccess = false;
     private int speedrunPoints = 0;
     private const int SPEEDRUN_POINTS_SUCCESS = 100;
+    // Assisted success
     private int droneKills = 0;
     private const int REQUIRED_DRONE_KILLS = 20;
+    // Cheat code success
     private float cheatKeyTimer = 0;
     private const float PRESS_CHEAT_KEY_TIME = 0.5f;
-    private KeyCode[] cheatCode = {
+    private readonly KeyCode[] cheatCode = {
         KeyCode.J, KeyCode.S, KeyCode.Space, KeyCode.K, KeyCode.Z
     };
     private int nbCorrectCheatKeys = 0;
     private KeyCode lastCheatKey = KeyCode.None;
     [SerializeField] AudioSource validCheatKeySound;
     [SerializeField] AudioSource wrongCheatCodeSound;
+    // Booming success (no necessary variable)
+    // Expert success (no necessary variable)
+    // Master success
+    private int startMasterSuccessCountDown = 3;
+    private bool[] masterSuccessProgress = { false, false, false };
 
     void Start()
     {
@@ -50,6 +62,14 @@ public class SuccessManager : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             successIDs[i] = false;
+        }
+    }
+
+    void Update()
+    {
+        if (StartMasterSuccess())
+        {
+            UpdateMasterSuccess();
         }
     }
 
@@ -95,7 +115,7 @@ public class SuccessManager : MonoBehaviour
             successIDs[(int)Success.FULL_GAS] = true;
             nbFuelSlotUses = 0;
         }
-        Debug.Log("Full Gas : " + successIDs[(int)Success.FULL_GAS]);
+        Debug.Log("Full Gas : " + successIDs[(int)Success.FULL_GAS] + " " + nbFuelSlotUses);
     }
 
     public void UpdateMendicantSuccess()
@@ -105,8 +125,12 @@ public class SuccessManager : MonoBehaviour
         {
             successIDs[(int)Success.MENDICANT] = true;
             nbPickedUpCoin = 0;
+            if (startMasterSuccessCountDown == 0)
+            {
+                masterSuccessProgress[0] = true;
+            }
         }
-        Debug.Log("Mendicant : " + successIDs[(int)Success.MENDICANT]);
+        Debug.Log("Mendicant : " + successIDs[(int)Success.MENDICANT] + " " + nbPickedUpCoin);
     }
 
     public void UpdateMassacreSuccess(int nbKills = 1)
@@ -118,9 +142,10 @@ public class SuccessManager : MonoBehaviour
             nbEnemiesKilled %= MAX_ENEMY_KILLED;
         }
         Debug.Log("Massacre : " + successIDs[(int)Success.MASSACRE] + " " + nbEnemiesKilled);
-        if (nbKills > 0)
+        if (startedPacifistSuccess && nbKills > 0)
         {
             CancelPacifistSuccess();
+            ResetMasterSuccess();
         }
     }
 
@@ -128,8 +153,8 @@ public class SuccessManager : MonoBehaviour
     {
         if (!startedPacifistSuccess)
         {
-            startedPacifistSuccess = true;
             Debug.Log("Start Pacifist");
+            startedPacifistSuccess = true;
         }
     }
 
@@ -153,6 +178,10 @@ public class SuccessManager : MonoBehaviour
                 successIDs[(int)Success.PACIFIST] = true;
                 CancelPacifistSuccess();
                 Debug.Log("Pacifist : " + successIDs[(int)Success.PACIFIST]);
+                if (startMasterSuccessCountDown == 0)
+                {
+                    masterSuccessProgress[2] = true;
+                }
             }
         }
     }
@@ -185,8 +214,12 @@ public class SuccessManager : MonoBehaviour
             {
                 successIDs[(int)Success.SPEEDRUN] = true;
                 ResetSpeedrunSuccess();
+                Debug.Log("Speedrun : " + successIDs[(int)Success.SPEEDRUN] + " " + speedrunPoints);
+                if (startMasterSuccessCountDown == 0)
+                {
+                    masterSuccessProgress[1] = true;
+                }
             }
-            Debug.Log("Speedrun : " + successIDs[(int)Success.SPEEDRUN] + " " + speedrunPoints);
         }
     }
 
@@ -272,5 +305,70 @@ public class SuccessManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void ValidateBoomingSuccess()
+    {
+        if (!successIDs[(int)Success.BOOMING])
+        {
+            successIDs[(int)Success.BOOMING] = true;
+            Debug.Log("Booming : " + successIDs[(int)Success.BOOMING]);
+        }
+    }
+
+    public void ValidateExpertSuccess()
+    {
+        if (!successIDs[(int)Success.EXPERT])
+        {
+            successIDs[(int)Success.EXPERT] = true;
+            Debug.Log("Expert : " + successIDs[(int)Success.EXPERT]);
+        }
+    }
+
+    private bool StartMasterSuccess()
+    {
+        if (startMasterSuccessCountDown == 0)
+        {
+            return true;
+        }
+        else if (startMasterSuccessCountDown == 3 && nbPickedUpCoin > 0 && !startedSpeedrunSuccess && !startedPacifistSuccess)
+        {
+            startMasterSuccessCountDown--;
+            Debug.Log("Start Master : " + startMasterSuccessCountDown);
+        }
+        else if (startMasterSuccessCountDown == 2 && nbPickedUpCoin > 0 && startedSpeedrunSuccess && !startedPacifistSuccess)
+        {
+            startMasterSuccessCountDown--;
+            Debug.Log("Start Master : " + startMasterSuccessCountDown);
+        }
+        else if (startMasterSuccessCountDown == 1 && nbPickedUpCoin > 0 && startedSpeedrunSuccess && startedPacifistSuccess)
+        {
+            startMasterSuccessCountDown--;
+            Debug.Log("Start Master : " + startMasterSuccessCountDown);
+            return true;
+        }
+        return false;
+    }
+
+    public void ResetMasterSuccess()
+    {
+        for (int i = 0; i < masterSuccessProgress.Length; i++)
+        {
+            if (masterSuccessProgress[i])
+            {
+                masterSuccessProgress[i] = false;
+            }
+        }
+        startMasterSuccessCountDown = 3;
+        Debug.Log("Reset Master");
+    }
+
+    private void UpdateMasterSuccess()
+    {
+        if(masterSuccessProgress[0] && masterSuccessProgress[1] && masterSuccessProgress[2])
+        {
+            successIDs[(int)Success.MASTER] = true;
+            Debug.Log("Master : " + successIDs[(int)Success.MASTER]);
+        }
     }
 }

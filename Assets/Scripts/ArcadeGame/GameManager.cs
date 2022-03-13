@@ -16,7 +16,7 @@ public enum Bonus
 public class GameManager : MonoBehaviour
 {
     [SerializeField] int fuelLeft; //Carburant restant
-    [SerializeField] int enemyLimit = 10; //Maximum d'ennemis simultanés
+    public const int ENEMY_LIMIT = 10; //Maximum d'ennemis simultanés
     [SerializeField] InterfaceController interfaceController;
     [SerializeField] UIController uIController;
     [SerializeField] FenteFuel fenteFuel;
@@ -44,7 +44,8 @@ public class GameManager : MonoBehaviour
     private bool droneActive = false;
     private const int MAX_SCORE = 10000000;
     public static int score = 0;
-    public static int highScore = 0;
+    public static readonly int INITIAL_HIGHSCORE = 150;
+    public static int highScore = INITIAL_HIGHSCORE;
 
     // The elements of the roulette
     private const float ROULETTE_TIMER = 2f;
@@ -112,6 +113,10 @@ public class GameManager : MonoBehaviour
         {
             successManager.UpdatePacifist();
             GetFirstControlKeyHeld();
+            if (score > INITIAL_HIGHSCORE)
+            {
+                successManager.ValidateExpertSuccess();
+            }
         }
     }
 
@@ -155,10 +160,6 @@ public class GameManager : MonoBehaviour
         {
             highScore = data.score;
             SetHighscoreText();
-        }
-        else
-        {
-            highScore = 0;
         }
     }
 
@@ -270,7 +271,7 @@ public class GameManager : MonoBehaviour
             for (float i = 0; i < rndNumber; i++)
             {
                 //Attendre d'être en-dessous de la limite d'ennemis pour en faire apparaitre de nouveaux
-                if (enemyCount >= enemyLimit)
+                if (enemyCount >= ENEMY_LIMIT)
                 {
                     break;
                 }
@@ -386,6 +387,10 @@ public class GameManager : MonoBehaviour
                 AddScore(enemyCount);
                 AddFuel(2 * enemyCount);
                 successManager.UpdateMassacreSuccess(enemyCount);
+                if (enemyCount == ENEMY_LIMIT)
+                {
+                    successManager.ValidateBoomingSuccess();
+                }
                 CleanEnnemies();
                 break;
             case Bonus.DRONE:
@@ -501,6 +506,7 @@ public class GameManager : MonoBehaviour
         successManager.CancelPacifistSuccess();
         successManager.ResetSpeedrunSuccess();
         successManager.ResetCheatCodeSuccess();
+        successManager.ResetMasterSuccess();
 
         gameMusic.Stop();
         isPlaying = false;
