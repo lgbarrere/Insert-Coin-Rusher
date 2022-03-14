@@ -18,6 +18,7 @@ public enum Success
 public class SuccessManager : MonoBehaviour
 {
     // Variables
+    [SerializeField] SuccessNotification successNotification;
     private Image[] successImages;
     private readonly bool[] successIDs = new bool[10];
     private SuccessDescription[] description;
@@ -109,8 +110,9 @@ public class SuccessManager : MonoBehaviour
         {
             successIDs[(int)success] = true;
             description[(int)success].SetLockedTextToUnlocked();
-            Debug.Log("Expert : " + successIDs[(int)success]);
+            Debug.Log("Success " + success + " : " + successIDs[(int)success]);
         }
+        successNotification.ShowSuccessNotification((int)success);
     }
 
     public void ResetFullGasSuccess()
@@ -125,17 +127,18 @@ public class SuccessManager : MonoBehaviour
     public void UpdateFullGasSuccess()
     {
         nbFuelSlotUses++;
+        Debug.Log("Full Gas : " + successIDs[(int)Success.FULL_GAS] + " " + nbFuelSlotUses);
         if (nbFuelSlotUses == MAX_FUEL_SLOT_USES)
         {
             ValidateSuccess(Success.FULL_GAS);
             nbFuelSlotUses = 0;
         }
-        Debug.Log("Full Gas : " + successIDs[(int)Success.FULL_GAS] + " " + nbFuelSlotUses);
     }
 
     public void UpdateMendicantSuccess()
     {
         nbPickedUpCoin++;
+        Debug.Log("Mendicant : " + successIDs[(int)Success.MENDICANT] + " " + nbPickedUpCoin);
         if (nbPickedUpCoin == MAX_PICKED_UP_COIN)
         {
             ValidateSuccess(Success.MENDICANT);
@@ -145,18 +148,17 @@ public class SuccessManager : MonoBehaviour
                 masterSuccessProgress[0] = true;
             }
         }
-        Debug.Log("Mendicant : " + successIDs[(int)Success.MENDICANT] + " " + nbPickedUpCoin);
     }
 
     public void UpdateMassacreSuccess(int nbKills = 1)
     {
         nbEnemiesKilled += nbKills;
+        Debug.Log("Massacre : " + successIDs[(int)Success.MASSACRE] + " " + nbEnemiesKilled);
         if (nbEnemiesKilled >= MAX_ENEMY_KILLED)
         {
             ValidateSuccess(Success.MASSACRE);
             nbEnemiesKilled %= MAX_ENEMY_KILLED;
         }
-        Debug.Log("Massacre : " + successIDs[(int)Success.MASSACRE] + " " + nbEnemiesKilled);
         if (startedPacifistSuccess && nbKills > 0)
         {
             CancelPacifistSuccess();
@@ -192,7 +194,6 @@ public class SuccessManager : MonoBehaviour
             {
                 ValidateSuccess(Success.PACIFIST);
                 CancelPacifistSuccess();
-                Debug.Log("Pacifist : " + successIDs[(int)Success.PACIFIST]);
                 if (startMasterSuccessCountDown == 0)
                 {
                     masterSuccessProgress[2] = true;
@@ -229,7 +230,6 @@ public class SuccessManager : MonoBehaviour
             {
                 ValidateSuccess(Success.SPEEDRUN);
                 ResetSpeedrunSuccess();
-                Debug.Log("Speedrun : " + successIDs[(int)Success.SPEEDRUN] + " " + speedrunPoints);
                 if (startMasterSuccessCountDown == 0)
                 {
                     masterSuccessProgress[1] = true;
@@ -293,7 +293,6 @@ public class SuccessManager : MonoBehaviour
                         {
                             ValidateSuccess(Success.CHEAT_CODE);
                             ResetCheatCodeSuccess();
-                            Debug.Log("Cheat code : " + successIDs[(int)Success.CHEAT_CODE]);
                             return true;
                         }
                     }
@@ -334,12 +333,12 @@ public class SuccessManager : MonoBehaviour
     public void UpdateBoomingSuccess()
     {
         boomingUsesCount++;
+        Debug.Log("Booming : " + successIDs[(int)Success.BOOMING] + " " + boomingUsesCount);
         if (boomingUsesCount >= REQUIRED_BOOMING_USES)
         {
             ValidateSuccess(Success.BOOMING);
             ResetBoomingSuccess();
         }
-        Debug.Log("Booming : " + successIDs[(int)Success.BOOMING] + " " + boomingUsesCount);
     }
 
     private bool StartMasterSuccess()
@@ -388,7 +387,6 @@ public class SuccessManager : MonoBehaviour
         if(masterSuccessProgress[0] && masterSuccessProgress[1] && masterSuccessProgress[2])
         {
             ValidateSuccess(Success.MASTER);
-            Debug.Log("Master : " + successIDs[(int)Success.MASTER]);
         }
     }
 }
