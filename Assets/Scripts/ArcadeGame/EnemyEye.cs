@@ -69,7 +69,7 @@ public class EnemyEye : MonoBehaviour
 
     IEnumerator Kill()
     {
-        gameManager.AddFuel(2);
+        gameManager.AddFuel(1);
         gameManager.ReduceEnemyCount();
         gameManager.AddScore(1);
 

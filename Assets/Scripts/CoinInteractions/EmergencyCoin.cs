@@ -51,6 +51,12 @@ public class EmergencyCoin : MonoBehaviour
         isCoinMoving = true;
     }
 
+    public void ResetEmergencyCoin()
+    {
+        coinCollider.enabled = true;
+        emergencyCoinSprite.enabled = true;
+    }
+
     void OnMouseDown()
     {
         if (!gameManager.MaxCoinReached())

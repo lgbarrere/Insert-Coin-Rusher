@@ -6,32 +6,36 @@ public class FenteFuel : MonoBehaviour
     [SerializeField] ArcadeCoinSlot maPiece;
     [SerializeField] AudioSource insertSound;
     public SuccessManager successManager;
+    private bool mouseOverSlot;
 
     public void SetGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
 
-    void OnMouseOver()
+    void Update()
     {
         if (!Menu.pause)
         {
-            if (gameManager.nbCoins > 0)
+            if (gameManager.nbCoins > 0 && mouseOverSlot)
             {
                 maPiece.Apparition();
             }
-        }
-    }
-
-    void OnMouseExit()
-    {
-        if (!Menu.pause)
-        {
-            if (!maPiece.animationIsON)
+            else if (!maPiece.animationIsON && !mouseOverSlot)
             {
                 maPiece.Disparition();
             }
         }
+    }
+
+    void OnMouseEnter()
+    {
+        mouseOverSlot = true;
+    }
+
+    void OnMouseExit()
+    {
+        mouseOverSlot = false;
     }
 
     void OnMouseDown()

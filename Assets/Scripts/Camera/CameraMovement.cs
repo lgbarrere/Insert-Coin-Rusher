@@ -36,10 +36,12 @@ public class CameraMovement : MonoBehaviour
             }
 
             // Recenter the camera
+            /*
             if (Input.GetMouseButtonDown(1))
             {
                 yRotation = 0;
             }
+            */
 
             // Right or left rotation
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))

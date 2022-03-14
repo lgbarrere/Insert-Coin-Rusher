@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     public static int score = 0;
     public static readonly int INITIAL_HIGHSCORE = 150;
     public static int highScore = INITIAL_HIGHSCORE;
+    [SerializeField] EmergencyCoin emergencyCoin;
 
     // The elements of the roulette
     private const float ROULETTE_TIMER = 2f;
@@ -115,7 +116,7 @@ public class GameManager : MonoBehaviour
             GetFirstControlKeyHeld();
             if (score > INITIAL_HIGHSCORE)
             {
-                successManager.ValidateExpertSuccess();
+                successManager.ValidateSuccess(Success.EXPERT);
             }
         }
     }
@@ -184,12 +185,13 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public void AddCoin()
+    public void AddCoin(int nbCoins = 1)
     {
         if(!MaxCoinReached())
         {
-            nbCoins++;
-            uIController.SetCoinText(nbCoins);
+            this.nbCoins += nbCoins;
+            this.nbCoins = Mathf.Min(this.nbCoins, MAX_COIN);
+            uIController.SetCoinText(this.nbCoins);
             coinToInventorySound.Play();
 
             if (MaxCoinReached())
@@ -389,7 +391,7 @@ public class GameManager : MonoBehaviour
                 successManager.UpdateMassacreSuccess(enemyCount);
                 if (enemyCount == ENEMY_LIMIT)
                 {
-                    successManager.ValidateBoomingSuccess();
+                    successManager.UpdateBoomingSuccess();
                 }
                 CleanEnnemies();
                 break;
@@ -501,11 +503,16 @@ public class GameManager : MonoBehaviour
         interfaceController.ShowGameOver();
         interfaceController.SetFuel(0);
 
+        // Refill inventory
+        emergencyCoin.ResetEmergencyCoin();
+        AddCoin(MAX_COIN);
+
         // Reset success
         successManager.ResetFullGasSuccess();
         successManager.CancelPacifistSuccess();
         successManager.ResetSpeedrunSuccess();
         successManager.ResetCheatCodeSuccess();
+        successManager.ResetBoomingSuccess();
         successManager.ResetMasterSuccess();
 
         gameMusic.Stop();

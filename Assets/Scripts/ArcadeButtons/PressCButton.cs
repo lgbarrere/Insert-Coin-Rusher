@@ -8,11 +8,11 @@ public class PressCButton : MonoBehaviour
     {
         if (!Menu.pause)
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.K))
             {
                 animator.SetBool("is_pressed", true);
             }
-            else if (Input.GetKeyUp(KeyCode.L))
+            else if (Input.GetKeyUp(KeyCode.K))
             {
                 animator.SetBool("is_pressed", false);
             }

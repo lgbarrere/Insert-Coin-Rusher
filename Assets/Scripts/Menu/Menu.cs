@@ -22,11 +22,6 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void MenuScoreUpdate()
-    {
-
-    }
-
     public void PauseGame()
     {
         pause = !pause;

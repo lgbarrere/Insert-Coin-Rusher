@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-enum Success
+public enum Success
 {
     FULL_GAS = 0,
     MENDICANT = 1,
@@ -20,6 +20,7 @@ public class SuccessManager : MonoBehaviour
     // Variables
     private Image[] successImages;
     private readonly bool[] successIDs = new bool[10];
+    private SuccessDescription[] description;
     // Full gas success
     private int nbFuelSlotUses = 0;
     private const int MAX_FUEL_SLOT_USES = 30;
@@ -50,15 +51,18 @@ public class SuccessManager : MonoBehaviour
     private KeyCode lastCheatKey = KeyCode.None;
     [SerializeField] AudioSource validCheatKeySound;
     [SerializeField] AudioSource wrongCheatCodeSound;
-    // Booming success (no necessary variable)
+    // Booming success
+    private int boomingUsesCount = 0;
+    private const int REQUIRED_BOOMING_USES = 3;
     // Expert success (no necessary variable)
     // Master success
     private int startMasterSuccessCountDown = 3;
-    private bool[] masterSuccessProgress = { false, false, false };
+    private readonly bool[] masterSuccessProgress = { false, false, false };
 
     void Start()
     {
         successImages = GetComponentsInChildren<Image>();
+        description = GetComponentsInChildren<SuccessDescription>();
         for (int i = 0; i < 10; i++)
         {
             successIDs[i] = false;
@@ -99,11 +103,22 @@ public class SuccessManager : MonoBehaviour
         }
     }
 
+    public void ValidateSuccess(Success success)
+    {
+        if (!successIDs[(int)success])
+        {
+            successIDs[(int)success] = true;
+            description[(int)success].SetLockedTextToUnlocked();
+            Debug.Log("Expert : " + successIDs[(int)success]);
+        }
+    }
+
     public void ResetFullGasSuccess()
     {
         if(nbFuelSlotUses != 0)
         {
             nbFuelSlotUses = 0;
+            Debug.Log("Reset Full gas");
         }
     }
 
@@ -112,7 +127,7 @@ public class SuccessManager : MonoBehaviour
         nbFuelSlotUses++;
         if (nbFuelSlotUses == MAX_FUEL_SLOT_USES)
         {
-            successIDs[(int)Success.FULL_GAS] = true;
+            ValidateSuccess(Success.FULL_GAS);
             nbFuelSlotUses = 0;
         }
         Debug.Log("Full Gas : " + successIDs[(int)Success.FULL_GAS] + " " + nbFuelSlotUses);
@@ -123,7 +138,7 @@ public class SuccessManager : MonoBehaviour
         nbPickedUpCoin++;
         if (nbPickedUpCoin == MAX_PICKED_UP_COIN)
         {
-            successIDs[(int)Success.MENDICANT] = true;
+            ValidateSuccess(Success.MENDICANT);
             nbPickedUpCoin = 0;
             if (startMasterSuccessCountDown == 0)
             {
@@ -138,7 +153,7 @@ public class SuccessManager : MonoBehaviour
         nbEnemiesKilled += nbKills;
         if (nbEnemiesKilled >= MAX_ENEMY_KILLED)
         {
-            successIDs[(int)Success.MASSACRE] = true;
+            ValidateSuccess(Success.MASSACRE);
             nbEnemiesKilled %= MAX_ENEMY_KILLED;
         }
         Debug.Log("Massacre : " + successIDs[(int)Success.MASSACRE] + " " + nbEnemiesKilled);
@@ -175,7 +190,7 @@ public class SuccessManager : MonoBehaviour
             pacifistTimer += Time.deltaTime;
             if (pacifistTimer >= PACIFIST_TIME_SUCCESS)
             {
-                successIDs[(int)Success.PACIFIST] = true;
+                ValidateSuccess(Success.PACIFIST);
                 CancelPacifistSuccess();
                 Debug.Log("Pacifist : " + successIDs[(int)Success.PACIFIST]);
                 if (startMasterSuccessCountDown == 0)
@@ -191,7 +206,7 @@ public class SuccessManager : MonoBehaviour
         if (!startedSpeedrunSuccess)
         {
             startedSpeedrunSuccess = true;
-            Debug.Log("Start speedrun");
+            Debug.Log("Start Speedrun");
         }
     }
 
@@ -201,7 +216,7 @@ public class SuccessManager : MonoBehaviour
         {
             speedrunPoints = 0;
             startedSpeedrunSuccess = false;
-            Debug.Log("Reset speedrun");
+            Debug.Log("Reset Speedrun");
         }
     }
 
@@ -212,7 +227,7 @@ public class SuccessManager : MonoBehaviour
             speedrunPoints += points;
             if (speedrunPoints >= SPEEDRUN_POINTS_SUCCESS)
             {
-                successIDs[(int)Success.SPEEDRUN] = true;
+                ValidateSuccess(Success.SPEEDRUN);
                 ResetSpeedrunSuccess();
                 Debug.Log("Speedrun : " + successIDs[(int)Success.SPEEDRUN] + " " + speedrunPoints);
                 if (startMasterSuccessCountDown == 0)
@@ -228,7 +243,7 @@ public class SuccessManager : MonoBehaviour
         if (droneKills != 0)
         {
             droneKills = 0;
-            Debug.Log("Reset assisted");
+            Debug.Log("Reset Assisted");
         }
     }
 
@@ -237,7 +252,7 @@ public class SuccessManager : MonoBehaviour
         droneKills++;
         if (droneKills >= REQUIRED_DRONE_KILLS)
         {
-            successIDs[(int)Success.ASSISTED] = true;
+            ValidateSuccess(Success.ASSISTED);
             ResetAssistedSuccess();
         }
         Debug.Log("Assisted : " + successIDs[(int)Success.ASSISTED] + " " + droneKills);
@@ -276,7 +291,7 @@ public class SuccessManager : MonoBehaviour
                         Debug.Log("Cheat key : " + key);
                         if (nbCorrectCheatKeys >= cheatCode.Length)
                         {
-                            successIDs[(int)Success.CHEAT_CODE] = true;
+                            ValidateSuccess(Success.CHEAT_CODE);
                             ResetCheatCodeSuccess();
                             Debug.Log("Cheat code : " + successIDs[(int)Success.CHEAT_CODE]);
                             return true;
@@ -307,22 +322,24 @@ public class SuccessManager : MonoBehaviour
         return false;
     }
 
-    public void ValidateBoomingSuccess()
+    public void ResetBoomingSuccess()
     {
-        if (!successIDs[(int)Success.BOOMING])
+        if (boomingUsesCount != 0)
         {
-            successIDs[(int)Success.BOOMING] = true;
-            Debug.Log("Booming : " + successIDs[(int)Success.BOOMING]);
+            boomingUsesCount = 0;
+            Debug.Log("Reset Booming");
         }
     }
 
-    public void ValidateExpertSuccess()
+    public void UpdateBoomingSuccess()
     {
-        if (!successIDs[(int)Success.EXPERT])
+        boomingUsesCount++;
+        if (boomingUsesCount >= REQUIRED_BOOMING_USES)
         {
-            successIDs[(int)Success.EXPERT] = true;
-            Debug.Log("Expert : " + successIDs[(int)Success.EXPERT]);
+            ValidateSuccess(Success.BOOMING);
+            ResetBoomingSuccess();
         }
+        Debug.Log("Booming : " + successIDs[(int)Success.BOOMING] + " " + boomingUsesCount);
     }
 
     private bool StartMasterSuccess()
@@ -359,15 +376,18 @@ public class SuccessManager : MonoBehaviour
                 masterSuccessProgress[i] = false;
             }
         }
-        startMasterSuccessCountDown = 3;
-        Debug.Log("Reset Master");
+        if (startMasterSuccessCountDown != 3)
+        {
+            startMasterSuccessCountDown = 3;
+            Debug.Log("Reset Master");
+        }
     }
 
     private void UpdateMasterSuccess()
     {
         if(masterSuccessProgress[0] && masterSuccessProgress[1] && masterSuccessProgress[2])
         {
-            successIDs[(int)Success.MASTER] = true;
+            ValidateSuccess(Success.MASTER);
             Debug.Log("Master : " + successIDs[(int)Success.MASTER]);
         }
     }

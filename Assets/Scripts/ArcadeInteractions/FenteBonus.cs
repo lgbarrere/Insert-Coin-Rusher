@@ -12,6 +12,7 @@ public class FenteBonus : MonoBehaviour
     private const float INSERT_COINS_REQUIRED_TIME = 2f;
     private int nbInsertedCoins = 0;
     private const int REQUIRED_INSERTED_COINS = 3;
+    private bool mouseOverSlot;
 
     public void SetGameManager(GameManager gameManager)
     {
@@ -20,6 +21,7 @@ public class FenteBonus : MonoBehaviour
 
     private void Update()
     {
+        // Necessary section for the Speedrun success
         if (nbInsertedCoins > 0)
         {
             insertCoinsTimer += Time.deltaTime;
@@ -29,28 +31,27 @@ public class FenteBonus : MonoBehaviour
                 insertCoinsTimer = 0;
             }
         }
-    }
-
-    void OnMouseOver()
-    {
         if (!Menu.pause)
         {
-            if (gameManager.nbCoins > 0 && gameManager.isPlaying)
+            if (gameManager.nbCoins > 0 && gameManager.isPlaying && mouseOverSlot)
             {
                 maPiece.Apparition();
             }
-        }
-    }
-
-    void OnMouseExit()
-    {
-        if (!Menu.pause)
-        {
-            if (!maPiece.animationIsON)
+            else if (!maPiece.animationIsON && !mouseOverSlot)
             {
                 maPiece.Disparition();
             }
         }
+    }
+
+    void OnMouseEnter()
+    {
+        mouseOverSlot = true;
+    }
+
+    void OnMouseExit()
+    {
+        mouseOverSlot = false;
     }
 
     void OnMouseDown()
