@@ -62,11 +62,12 @@ public class GameManager : MonoBehaviour
     public SuccessManager successManager;
 
     // Available spaceship control keys
-    KeyCode[] spaceshipInputs = {
+    private readonly KeyCode[] spaceshipInputs = {
             KeyCode.Z, KeyCode.Q, KeyCode.S, KeyCode.D,
             KeyCode.Space, KeyCode.J, KeyCode.K
         };
-    KeyCode firstKeyPressed = KeyCode.None;
+    private float[] keyPressedTimes;
+    private const float PRESS_CHEAT_KEY_TIME = 0.5f;
 
     void Start()
     {
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
         nbCoins = MAX_COIN;
         uIController.SetCoinText(nbCoins);
         uIController.SetCoinTextColor(new Color(255, 0, 0, 255));
+        keyPressedTimes = new float[spaceshipInputs.Length];
         LoadHighScore();
         EndGame();
     }
@@ -123,29 +125,36 @@ public class GameManager : MonoBehaviour
 
     private void GetFirstControlKeyHeld()
     {
-        if (firstKeyPressed == KeyCode.None)
+        KeyCode firstKeyHeld = KeyCode.None;
+        for (int i = 0; i < spaceshipInputs.Length; i++)
         {
-            foreach (KeyCode key in spaceshipInputs)
+            KeyCode key = spaceshipInputs[i];
+            if (Input.GetKey(key))
             {
-                if (Input.GetKeyDown(key))
+                keyPressedTimes[i] += Time.deltaTime;
+                if (keyPressedTimes[i] >= PRESS_CHEAT_KEY_TIME)
                 {
-                    firstKeyPressed = key;
-                    successManager.UpdateCheatCodeSuccess(firstKeyPressed);
+                    firstKeyHeld = key;
+                    // Reset key times
+                    for (int j = 0; j < spaceshipInputs.Length; j++)
+                    {
+                        if (keyPressedTimes[j] != 0 && i != j)
+                        {
+                            keyPressedTimes[j] = 0;
+                        }
+                    }
                     break;
                 }
             }
+            else if (keyPressedTimes[i] > 0)
+            {
+                keyPressedTimes[i] = 0;
+            }
         }
-        else
+        // If true, the cheat code is correct and activates a CLEAR
+        if(successManager.UpdateCheatCodeSuccess(firstKeyHeld))
         {
-            if (!Input.GetKey(firstKeyPressed))
-            {
-                firstKeyPressed = KeyCode.None;
-            }
-            // If true, the cheat code is correct and activates a CLEAR
-            if(successManager.UpdateCheatCodeSuccess(firstKeyPressed))
-            {
-                ApplyBonus(Bonus.CLEAR);
-            }
+            ApplyBonus(Bonus.CLEAR);
         }
     }
 
@@ -261,13 +270,11 @@ public class GameManager : MonoBehaviour
     {
         int rndWait, rndNumber, rndPosX, rndPosY;
         float startX, startY;
-
         enemyCount = 0;
 
         while (isPlaying)
         {
             rndWait = Random.Range(3, 5); //Temps d'attente pour la prochaine vague
-
             rndNumber = Random.Range(2, 4); //Nombre d'ennemis sur cette vague
 
             for (float i = 0; i < rndNumber; i++)
@@ -283,7 +290,7 @@ public class GameManager : MonoBehaviour
                 startX = rndPosX * 0.3f;
                 
                 rndPosY = Random.Range(0, 2);
-                startY = .85f - 0.2f * rndPosY;
+                startY = 1f - 0.2f * rndPosY;
 
                 Vector3 startPos = new(startX, startY, 0);
 

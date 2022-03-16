@@ -13,7 +13,7 @@ public class Spaceship : MonoBehaviour
     
     [SerializeField] float health = 1f;
     [SerializeField] float speed; //Vitesse de déplacement du vaisseau
-    float horizontalMove, verticalMove; //Stocke l'input du joueur
+    float horizontalMove; //Stocke l'input du joueur
     Vector2 moveVector; //Vecteur de déplacement du vaisseau
     [SerializeField] GameObject projectile; //Projectile tiré par le vaisseau
     [SerializeField] Shield shield;
@@ -54,8 +54,7 @@ public class Spaceship : MonoBehaviour
         if (!Menu.pause)
         {
             horizontalMove = Input.GetAxisRaw("Horizontal"); //Input de l'axe horizontal
-            verticalMove = Input.GetAxisRaw("Vertical"); //Input de l'axe vertical
-            moveVector = new Vector2(horizontalMove, verticalMove); //Vector2D du déplacement
+            moveVector = new Vector2(horizontalMove, 0); //Vector2D du déplacement
             animator.SetBool("left", Input.GetKey(KeyCode.Q));
             animator.SetBool("right", Input.GetKey(KeyCode.D));
         }

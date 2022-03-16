@@ -6,36 +6,100 @@ public class SuccessDescription : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler
 {
     private Text[] textDescription;
+    private Image[] successImages;
+    private bool successUnlocked = false;
+
     void Start()
     {
         textDescription = GetComponentsInChildren<Text>();
+        successImages = GetComponentsInChildren<Image>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        foreach (Text text in textDescription)
+        if (!textDescription[0].enabled)
         {
-            if (!text.enabled)
-            {
-                text.enabled = true;
-            }
+            textDescription[0].enabled = true;
+        }
+        if (!textDescription[1].enabled)
+        {
+            textDescription[1].enabled = true;
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        foreach (Text text in textDescription)
+        if (textDescription[0].enabled)
         {
-            if (text.enabled)
-            {
-                text.enabled = false;
-            }
+            textDescription[0].enabled = false;
+        }
+        if (textDescription[1].enabled)
+        {
+            textDescription[1].enabled = false;
+        }
+    }
+
+    public void ShowSuccess()
+    {
+        // Icons
+        if (successImages[0].enabled == successUnlocked)
+        {
+            successImages[0].enabled = !successUnlocked;
+        }
+        if (successImages[1].enabled != successUnlocked)
+        {
+            successImages[1].enabled = successUnlocked;
+        }
+        // Slider's images
+        if (!successImages[2].enabled)
+        {
+            successImages[2].enabled = true;
+        }
+        if (!successImages[3].enabled)
+        {
+            successImages[3].enabled = true;
+        }
+        // Slider's text
+        if (!textDescription[2].enabled)
+        {
+            textDescription[2].enabled = true;
+        }
+    }
+
+    public void HideSuccess()
+    {
+        // Icons
+        if (successImages[0].enabled != false)
+        {
+            successImages[0].enabled = false;
+        }
+        if (successImages[1].enabled != false)
+        {
+            successImages[1].enabled = false;
+        }
+        // Slider's images
+        if (successImages[2].enabled != false)
+        {
+            successImages[2].enabled = false;
+        }
+        if (successImages[3].enabled != false)
+        {
+            successImages[3].enabled = false;
+        }
+        // Slider's text
+        if (textDescription[2].enabled != false)
+        {
+            textDescription[2].enabled = false;
         }
     }
 
     public void SetLockedTextToUnlocked()
     {
-        textDescription[1].text = "Déverrouillé";
-        textDescription[1].color = Color.white;
+        if (!successUnlocked)
+        {
+            textDescription[1].text = "Déverrouillé";
+            textDescription[1].color = Color.white;
+            successUnlocked = true;
+        }
     }
 }

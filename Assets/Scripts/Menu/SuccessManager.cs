@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum Success
 {
@@ -19,9 +18,8 @@ public class SuccessManager : MonoBehaviour
 {
     // Variables
     [SerializeField] SuccessNotification successNotification;
-    private Image[] successImages;
     private readonly bool[] successIDs = new bool[10];
-    private SuccessDescription[] description;
+    private SuccessDescription[] descriptions;
     // Full gas success
     private int nbFuelSlotUses = 0;
     private const int MAX_FUEL_SLOT_USES = 30;
@@ -43,8 +41,6 @@ public class SuccessManager : MonoBehaviour
     private int droneKills = 0;
     private const int REQUIRED_DRONE_KILLS = 20;
     // Cheat code success
-    private float cheatKeyTimer = 0;
-    private const float PRESS_CHEAT_KEY_TIME = 0.5f;
     private readonly KeyCode[] cheatCode = {
         KeyCode.J, KeyCode.S, KeyCode.Space, KeyCode.K, KeyCode.Z
     };
@@ -62,8 +58,7 @@ public class SuccessManager : MonoBehaviour
 
     void Start()
     {
-        successImages = GetComponentsInChildren<Image>();
-        description = GetComponentsInChildren<SuccessDescription>();
+        descriptions = GetComponentsInChildren<SuccessDescription>();
         for (int i = 0; i < 10; i++)
         {
             successIDs[i] = false;
@@ -80,27 +75,17 @@ public class SuccessManager : MonoBehaviour
 
     public void ShowSuccess()
     {
-        for (int i = 0; i < 10; i++)
+        foreach (SuccessDescription description in descriptions)
         {
-            if (successImages[2*i].enabled == successIDs[i])
-            {
-                successImages[2*i].enabled = !successIDs[i];
-            }
-            if (successImages[2*i+1].enabled != successIDs[i])
-            {
-                successImages[2*i+1].enabled = successIDs[i];
-            }
+            description.ShowSuccess();
         }
     }
 
     public void HideSuccess()
     {
-        for (int i = 0; i < 20; i++)
+        foreach (SuccessDescription description in descriptions)
         {
-            if (successImages[i].enabled != false)
-            {
-                successImages[i].enabled = false;
-            }
+            description.HideSuccess();
         }
     }
 
@@ -109,7 +94,7 @@ public class SuccessManager : MonoBehaviour
         if (!successIDs[(int)success])
         {
             successIDs[(int)success] = true;
-            description[(int)success].SetLockedTextToUnlocked();
+            descriptions[(int)success].SetLockedTextToUnlocked();
             Debug.Log("Success " + success + " : " + successIDs[(int)success]);
         }
         successNotification.ShowSuccessNotification((int)success);
@@ -264,10 +249,6 @@ public class SuccessManager : MonoBehaviour
         {
             nbCorrectCheatKeys = 0;
         }
-        if (cheatKeyTimer != 0)
-        {
-            cheatKeyTimer = 0;
-        }
     }
 
     // Return true if the cheat code is correct, false otherwise
@@ -278,45 +259,33 @@ public class SuccessManager : MonoBehaviour
         {
             if (key != lastCheatKey)
             {
-                cheatKeyTimer += Time.deltaTime;
-                if (cheatKeyTimer >= PRESS_CHEAT_KEY_TIME)
+                lastCheatKey = key;
+                // If detected key is correct, remember it
+                if (key == cheatCode[nbCorrectCheatKeys])
                 {
-                    lastCheatKey = key;
-                    cheatKeyTimer = 0;
-                    // If detected key is correct, remember it
-                    if (key == cheatCode[nbCorrectCheatKeys])
+                    nbCorrectCheatKeys++;
+                    validCheatKeySound.Play();
+                    Debug.Log("Cheat key : " + key);
+                    if (nbCorrectCheatKeys >= cheatCode.Length)
                     {
-                        nbCorrectCheatKeys++;
-                        validCheatKeySound.Play();
-                        Debug.Log("Cheat key : " + key);
-                        if (nbCorrectCheatKeys >= cheatCode.Length)
-                        {
-                            ValidateSuccess(Success.CHEAT_CODE);
-                            ResetCheatCodeSuccess();
-                            return true;
-                        }
+                        ValidateSuccess(Success.CHEAT_CODE);
+                        ResetCheatCodeSuccess();
+                        return true;
                     }
-                    // Reset otherwise
-                    else if (nbCorrectCheatKeys != 0)
-                    {
-                        nbCorrectCheatKeys = 0;
-                        wrongCheatCodeSound.Play();
-                        Debug.Log("Cheat code wrong : " + key);
-                    }
+                }
+                // Reset otherwise
+                else if (nbCorrectCheatKeys != 0)
+                {
+                    nbCorrectCheatKeys = 0;
+                    wrongCheatCodeSound.Play();
+                    Debug.Log("Cheat code wrong : " + key);
                 }
             }
         }
         // Id the current held key is released, reset key detection
-        else
+        else if (lastCheatKey != KeyCode.None)
         {
-            if (cheatKeyTimer != 0)
-            {
-                cheatKeyTimer = 0;
-            }
-            if (lastCheatKey != KeyCode.None)
-            {
-                lastCheatKey = KeyCode.None;
-            }
+            lastCheatKey = KeyCode.None;
         }
         return false;
     }
