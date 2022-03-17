@@ -20,6 +20,7 @@ public class SuccessManager : MonoBehaviour
     [SerializeField] SuccessNotification successNotification;
     private readonly bool[] successIDs = new bool[10];
     private SuccessDescription[] descriptions;
+    [SerializeField] AudioSource successUnlockedSound;
     // Full gas success
     private int nbFuelSlotUses = 0;
     private const int MAX_FUEL_SLOT_USES = 30;
@@ -97,6 +98,7 @@ public class SuccessManager : MonoBehaviour
             descriptions[(int)success].SetLockedTextToUnlocked();
             Debug.Log("Success " + success + " : " + successIDs[(int)success]);
         }
+        successUnlockedSound.Play();
         successNotification.ShowSuccessNotification((int)success);
     }
 
@@ -187,7 +189,7 @@ public class SuccessManager : MonoBehaviour
                     masterSuccessProgress[2] = true;
                 }
             }
-            descriptions[(int)Success.PACIFIST].UpdateSlider(pacifistTimer);
+            descriptions[(int)Success.PACIFIST].UpdateSlider((int)pacifistTimer);
         }
     }
 

@@ -105,7 +105,7 @@ public class SuccessDescription : MonoBehaviour,
         }
     }
 
-    public void UpdateSlider(float value)
+    public void UpdateSlider(int value)
     {
         slider.value = value;
         textDescription[2].text = value + " / " + slider.maxValue;

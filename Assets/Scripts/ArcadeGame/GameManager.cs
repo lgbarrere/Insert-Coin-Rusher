@@ -201,8 +201,10 @@ public class GameManager : MonoBehaviour
             this.nbCoins += nbCoins;
             this.nbCoins = Mathf.Min(this.nbCoins, MAX_COIN);
             uIController.SetCoinText(this.nbCoins);
-            coinToInventorySound.Play();
-
+            if (isPlaying)
+            {
+                coinToInventorySound.Play();
+            }
             if (MaxCoinReached())
             {
                 uIController.SetCoinTextColor(new Color(255, 0, 0, 255)); // Red
@@ -483,8 +485,10 @@ public class GameManager : MonoBehaviour
     //Met fin à la partie en cours
     void EndGame()
     {
+        isPlaying = false;
+
         // Save the score as highscore and reset it
-        if(score > highScore)
+        if (score > highScore)
         {
             highScore = score;
             SetHighscoreText();
@@ -524,6 +528,5 @@ public class GameManager : MonoBehaviour
         successManager.ResetMasterSuccess();
 
         gameMusic.Stop();
-        isPlaying = false;
     }
 }
