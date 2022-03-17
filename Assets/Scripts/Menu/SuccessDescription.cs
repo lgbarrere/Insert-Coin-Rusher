@@ -8,11 +8,13 @@ public class SuccessDescription : MonoBehaviour,
     private Text[] textDescription;
     private Image[] successImages;
     private bool successUnlocked = false;
+    private Slider slider;
 
     void Start()
     {
         textDescription = GetComponentsInChildren<Text>();
         successImages = GetComponentsInChildren<Image>();
+        slider = GetComponentInChildren<Slider>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -101,5 +103,11 @@ public class SuccessDescription : MonoBehaviour,
             textDescription[1].color = Color.white;
             successUnlocked = true;
         }
+    }
+
+    public void UpdateSlider(float value)
+    {
+        slider.value = value;
+        textDescription[2].text = value + " / " + slider.maxValue;
     }
 }

@@ -467,6 +467,7 @@ public class GameManager : MonoBehaviour
         score = Mathf.Min(score + scoreToAdd, MAX_SCORE);
         scoreText.text = score.ToString();
         SetScoreText();
+        successManager.UpdateExpert(score);
     }
 
     private void SetScoreText()

@@ -116,8 +116,9 @@ public class SuccessManager : MonoBehaviour
         if (nbFuelSlotUses == MAX_FUEL_SLOT_USES)
         {
             ValidateSuccess(Success.FULL_GAS);
-            nbFuelSlotUses = 0;
+            ResetFullGasSuccess();
         }
+        descriptions[(int)Success.FULL_GAS].UpdateSlider(nbFuelSlotUses);
     }
 
     public void UpdateMendicantSuccess()
@@ -133,6 +134,7 @@ public class SuccessManager : MonoBehaviour
                 masterSuccessProgress[0] = true;
             }
         }
+        descriptions[(int)Success.MENDICANT].UpdateSlider(nbPickedUpCoin);
     }
 
     public void UpdateMassacreSuccess(int nbKills = 1)
@@ -149,6 +151,7 @@ public class SuccessManager : MonoBehaviour
             CancelPacifistSuccess();
             ResetMasterSuccess();
         }
+        descriptions[(int)Success.MASSACRE].UpdateSlider(nbEnemiesKilled);
     }
 
     public void StartPacifistSuccess()
@@ -184,6 +187,7 @@ public class SuccessManager : MonoBehaviour
                     masterSuccessProgress[2] = true;
                 }
             }
+            descriptions[(int)Success.PACIFIST].UpdateSlider(pacifistTimer);
         }
     }
 
@@ -220,6 +224,7 @@ public class SuccessManager : MonoBehaviour
                     masterSuccessProgress[1] = true;
                 }
             }
+            descriptions[(int)Success.SPEEDRUN].UpdateSlider(speedrunPoints);
         }
     }
 
@@ -240,6 +245,7 @@ public class SuccessManager : MonoBehaviour
             ValidateSuccess(Success.ASSISTED);
             ResetAssistedSuccess();
         }
+        descriptions[(int)Success.ASSISTED].UpdateSlider(droneKills);
         Debug.Log("Assisted : " + successIDs[(int)Success.ASSISTED] + " " + droneKills);
     }
 
@@ -270,6 +276,7 @@ public class SuccessManager : MonoBehaviour
                     {
                         ValidateSuccess(Success.CHEAT_CODE);
                         ResetCheatCodeSuccess();
+                        descriptions[(int)Success.CHEAT_CODE].UpdateSlider(nbCorrectCheatKeys);
                         return true;
                     }
                 }
@@ -280,6 +287,7 @@ public class SuccessManager : MonoBehaviour
                     wrongCheatCodeSound.Play();
                     Debug.Log("Cheat code wrong : " + key);
                 }
+                descriptions[(int)Success.CHEAT_CODE].UpdateSlider(nbCorrectCheatKeys);
             }
         }
         // Id the current held key is released, reset key detection
@@ -308,6 +316,12 @@ public class SuccessManager : MonoBehaviour
             ValidateSuccess(Success.BOOMING);
             ResetBoomingSuccess();
         }
+        descriptions[(int)Success.BOOMING].UpdateSlider(boomingUsesCount);
+    }
+
+    public void UpdateExpert(int score)
+    {
+        descriptions[(int)Success.EXPERT].UpdateSlider(score);
     }
 
     private bool StartMasterSuccess()
@@ -353,9 +367,18 @@ public class SuccessManager : MonoBehaviour
 
     private void UpdateMasterSuccess()
     {
+        int tmpCmpt = 0;
         if(masterSuccessProgress[0] && masterSuccessProgress[1] && masterSuccessProgress[2])
         {
             ValidateSuccess(Success.MASTER);
         }
+        foreach (bool progress in masterSuccessProgress)
+        {
+            if (progress)
+            {
+                tmpCmpt++;
+            }
+        }
+        descriptions[(int)Success.MASTER].UpdateSlider(tmpCmpt);
     }
 }
