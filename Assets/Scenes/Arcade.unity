@@ -938,7 +938,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 400}
+  m_AnchoredPosition: {x: 0, y: 420}
   m_SizeDelta: {x: 440, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &192613410
@@ -3457,7 +3457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 290, y: 95}
+  m_AnchoredPosition: {x: 290, y: 125}
   m_SizeDelta: {x: 570, y: 430}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &674405438
@@ -5642,7 +5642,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -290, y: 50}
+  m_AnchoredPosition: {x: -290, y: 80}
   m_SizeDelta: {x: 570, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &963141669
@@ -7606,7 +7606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: 110}
+  m_AnchoredPosition: {x: -10, y: 100}
   m_SizeDelta: {x: 550, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1313828143
@@ -7999,8 +7999,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: -40}
-  m_SizeDelta: {x: 550, y: 100}
+  m_AnchoredPosition: {x: -10, y: -65}
+  m_SizeDelta: {x: 550, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1386562697
 MonoBehaviour:
@@ -8035,8 +8035,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "A ou gauche : tourner la t\xEAte \xE0 gauche\nE ou droite : tourner la
-    t\xEAte \xE0 droite\r\nShift : (d\xE9)zoomer"
+  m_Text: "- A ou clic \xE0 gauche de l'\xE9cran\n- E ou clic \xE0 droite de l'\xE9cran\r\n-
+    Shift : (d\xE9)zoomer"
 --- !u!222 &1386562698
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8246,7 +8246,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: -190}
+  m_AnchoredPosition: {x: -10, y: -220}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1419620750
@@ -8282,7 +8282,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Z, Q, S et D : se d\xE9placer\nEspace : tirer\r\nJ et K : boutons sp\xE9ciaux"
+  m_Text: "Q et D : se d\xE9placer\nEspace : tirer\r\nZ, S, J et K : boutons sp\xE9ciaux"
 --- !u!222 &1419620751
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9269,7 +9269,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -75, y: -115}
+  m_AnchoredPosition: {x: -75, y: -145}
   m_SizeDelta: {x: 420, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1548512400
@@ -10249,8 +10249,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -235, y: 25}
-  m_SizeDelta: {x: 100, y: 30}
+  m_AnchoredPosition: {x: -10, y: 10}
+  m_SizeDelta: {x: 550, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1731805539
 MonoBehaviour:
@@ -10285,7 +10285,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Clavier
+  m_Text: "Tourner la t\xEAte (gauche/droite) et zoom"
 --- !u!222 &1731805540
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12191,8 +12191,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -175, y: 195}
-  m_SizeDelta: {x: 220, y: 30}
+  m_AnchoredPosition: {x: -120, y: 190}
+  m_SizeDelta: {x: 330, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2066451555
 MonoBehaviour:
@@ -12227,7 +12227,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Clics de souris
+  m_Text: Clics gauche de souris
 --- !u!222 &2066451556
 CanvasRenderer:
   m_ObjectHideFlags: 0

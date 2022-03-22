@@ -22,33 +22,28 @@ public class CameraMovement : MonoBehaviour
         if (!Menu.pause)
         {
             // Change the rotation speed
-            switch(cameraZoom.zoomState)
+            switch (cameraZoom.zoomState)
             {
                 case CameraZoom.ZoomState.ZOOMED_IN:
                     cameraRotationSpeed = zoomedInRotationSpeed;
                     break;
+                case CameraZoom.ZoomState.ZOOMING_IN:
+                    break;
                 case CameraZoom.ZoomState.ZOOMED_OUT:
                     cameraRotationSpeed = zoomedOutRotationSpeed;
+                    break;
+                case CameraZoom.ZoomState.ZOOMING_OUT:
                     break;
                 default:
                     cameraRotationSpeed = zoomingRotationSpeed;
                     break;
             }
-
-            // Recenter the camera
-            /*
-            if (Input.GetMouseButtonDown(1))
-            {
-                yRotation = 0;
-            }
-            */
-
             // Right or left rotation
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) || Input.GetMouseButton(1) && Input.mousePosition.x < Screen.width / 2.0f)
             {
                 yRotation -= cameraRotationSpeed * Time.deltaTime;
             }
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.E) || Input.GetMouseButton(1) && Input.mousePosition.x >= Screen.width / 2.0f)
             {
                 yRotation += cameraRotationSpeed * Time.deltaTime;
             }
