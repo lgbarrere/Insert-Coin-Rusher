@@ -7,24 +7,20 @@ enum NotificationState
 
 public class SuccessNotification : MonoBehaviour
 {
-    private Transform[] successPositions;
+    private RectTransform[] successPositions;
     private Canvas[] successAppearence;
     private int notificationOrder = 0;
-    private Vector2 startPosition;
-    private Vector2 targetPosition;
     private readonly NotificationState[] successNotification = new NotificationState[10];
-    const float notificationSpeed = 2f;
+    const float notificationSpeed = 200f;
     private float notificationStandTime = 0;
     private const float MAX_STAND_TIME = 3f;
+    float notificationDistance = 0;
+    const float NOTIFICATION_MAX_DISTANCE = 100;
 
     void Start()
     {
-        successPositions = GetComponentsInChildren<Transform>();
+        successPositions = GetComponentsInChildren<RectTransform>();
         successAppearence = GetComponentsInChildren<Canvas>();
-        startPosition = successPositions[0].position;
-        targetPosition = new(
-            successPositions[0].position.x, successPositions[0].position.y - 100
-            );
         for (int i = 0; i < 10; i++)
         {
             successNotification[i] = NotificationState.HIDDEN;
@@ -40,13 +36,21 @@ public class SuccessNotification : MonoBehaviour
                 case NotificationState.HIDDEN:
                     break;
                 case NotificationState.SHOWING:
-                    successPositions[i + 1].position = Vector2.MoveTowards(
-                        successPositions[i + 1].position, targetPosition, notificationSpeed
+                    successPositions[i + 1].localPosition = new(
+                        successPositions[i + 1].localPosition.x, 
+                        successPositions[i + 1].localPosition.y - notificationSpeed * Time.deltaTime
                         );
-                    if (Vector2.Distance(successPositions[i + 1].position, targetPosition) < 0.001f)
+                    notificationDistance += notificationSpeed * Time.deltaTime;
+                    if(notificationDistance >= NOTIFICATION_MAX_DISTANCE)
                     {
-                        successPositions[i + 1].position = targetPosition;
+                        Debug.Log(successPositions[i + 1].localPosition);
+                        successPositions[i + 1].localPosition = new(
+                            successPositions[i + 1].localPosition.x,
+                            -NOTIFICATION_MAX_DISTANCE
+                            );
+                        notificationDistance = NOTIFICATION_MAX_DISTANCE;
                         successNotification[i] = NotificationState.STANDING;
+                        Debug.Log(successPositions[i + 1].localPosition);
                     }
                     break;
                 case NotificationState.STANDING:
@@ -58,14 +62,21 @@ public class SuccessNotification : MonoBehaviour
                     }
                     break;
                 case NotificationState.HIDDING:
-                    successPositions[i + 1].position = Vector2.MoveTowards(
-                        successPositions[i + 1].position, startPosition, notificationSpeed
+                    successPositions[i + 1].localPosition = new(
+                        successPositions[i + 1].localPosition.x,
+                        successPositions[i + 1].localPosition.y + notificationSpeed * Time.deltaTime
                         );
-                    if (Vector2.Distance(successPositions[i + 1].position, startPosition) < 0.001f)
+                    notificationDistance -= notificationSpeed * Time.deltaTime;
+                    if (notificationDistance <= 0)
                     {
-                        successPositions[i + 1].position = startPosition;
+                        successPositions[i + 1].localPosition = new(
+                            successPositions[i + 1].localPosition.x,
+                            0
+                            );
+                        notificationDistance = 0;
                         successNotification[i] = NotificationState.HIDDEN;
                         notificationOrder--;
+                        successAppearence[i].sortingOrder = notificationOrder;
                     }
                     break;
             }
@@ -75,7 +86,7 @@ public class SuccessNotification : MonoBehaviour
     public void ShowSuccessNotification(int successID)
     {
         successNotification[successID] = NotificationState.SHOWING;
-        successAppearence[successID].sortingOrder = notificationOrder;
         notificationOrder++;
+        successAppearence[successID].sortingOrder = notificationOrder;
     }
 }
